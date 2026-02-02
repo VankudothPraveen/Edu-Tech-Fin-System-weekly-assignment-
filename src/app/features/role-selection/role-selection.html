@@ -1,1 +1,56 @@
-<p>role-selection works!</p>
+<div class="role-selection-container">
+  <div class="container">
+    <div class="text-center mb-4">
+      <h1 class="main-title">Tech Financial System</h1>
+      <p class="subtitle">GUVI Training Management Platform</p>
+    </div>
+
+    <div class="grid grid-3 role-cards">
+      <!-- Admin Card -->
+      <div class="glass-card role-card" (click)="selectRole('admin')">
+        <div class="role-icon admin-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <h3>Admin</h3>
+        <p>Manage trainers, clients, and training assignments</p>
+        <div class="role-badge">Login Only</div>
+      </div>
+
+      <!-- Trainer Card -->
+      <div class="glass-card role-card" (click)="selectRole('trainer')">
+        <div class="role-icon trainer-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>Trainer</h3>
+        <p>Provide training and manage your assignments</p>
+        <div class="role-badge">Login / Register</div>
+      </div>
+
+      <!-- Client Card -->
+      <div class="glass-card role-card" (click)="selectRole('client')">
+        <div class="role-icon client-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <h3>Client</h3>
+        <p>Request training and track your progress</p>
+        <div class="role-badge">Login / Register</div>
+      </div>
+    </div>
+
+    <div class="text-center mt-4">
+      <p class="help-text">Select your role to continue</p>
+    </div>
+  </div>
+</div>

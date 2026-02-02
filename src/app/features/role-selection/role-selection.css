@@ -1,0 +1,131 @@
+.role-selection-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-lg);
+}
+
+.main-title {
+    font-size: 3rem;
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: var(--spacing-sm);
+}
+
+.subtitle {
+    font-size: 1.25rem;
+    color: var(--color-light-gray);
+    margin-bottom: var(--spacing-xl);
+}
+
+.role-cards {
+    margin-top: var(--spacing-xl);
+}
+
+.role-card {
+    text-align: center;
+    cursor: pointer;
+    padding: var(--spacing-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.role-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform var(--transition-base);
+}
+
+.role-card:hover::before {
+    transform: scaleX(1);
+}
+
+.role-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all var(--transition-base);
+}
+
+.admin-icon {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.trainer-icon {
+    background: var(--gradient-primary);
+    color: white;
+}
+
+.client-icon {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+}
+
+.role-card:hover .role-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.role-card h3 {
+    font-size: 1.75rem;
+    margin-bottom: var(--spacing-sm);
+}
+
+.role-card p {
+    color: var(--color-light-gray);
+    margin-bottom: var(--spacing-md);
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-full);
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-accent-coral);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.help-text {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .role-card {
+        padding: var(--spacing-md);
+    }
+
+    .role-icon {
+        width: 60px;
+        height: 60px;
+    }
+
+    .role-icon svg {
+        width: 32px;
+        height: 32px;
+    }
+}

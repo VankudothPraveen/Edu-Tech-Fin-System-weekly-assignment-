@@ -1,0 +1,98 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="container">
+            <div class="flex-between">
+                <div>
+                    <h2>Client Requests</h2>
+                    <p>Review and approve client training requests</p>
+                </div>
+                <a routerLink="/admin" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab" [class.active]="filter === 'all'" (click)="filter = 'all'; applyFilter()">
+                All ({{clients.length}})
+            </button>
+            <button class="filter-tab" [class.active]="filter === 'REQUESTED'"
+                (click)="filter = 'REQUESTED'; applyFilter()">
+                Pending ({{requestedCount}})
+            </button>
+            <button class="filter-tab" [class.active]="filter === 'APPROVED'"
+                (click)="filter = 'APPROVED'; applyFilter()">
+                Approved ({{approvedCount}})
+            </button>
+            <button class="filter-tab" [class.active]="filter === 'REJECTED'"
+                (click)="filter = 'REJECTED'; applyFilter()">
+                Rejected ({{rejectedCount}})
+            </button>
+        </div>
+
+        <!-- Clients List -->
+        <div class="clients-grid">
+            <div *ngFor="let client of filteredClients" class="client-card glass-card-solid">
+                <div class="card-header">
+                    <div>
+                        <h3>{{client.name}}</h3>
+                        <p class="company">{{client.companyName}}</p>
+                    </div>
+                    <span class="badge" [ngClass]="getStatusClass(client.status)">{{client.status}}</span>
+                </div>
+
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Email</label>
+                            <p>{{client.email}}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Phone</label>
+                            <p>{{client.phone}}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Technology</label>
+                            <p>{{client.technology}}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Duration</label>
+                            <p>{{client.duration}}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Start Date</label>
+                            <p>{{client.expectedStartDate | date}}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Budget</label>
+                            <p>{{client.budget ? '$' + client.budget : 'Not specified'}}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-actions" *ngIf="client.status === 'REQUESTED'">
+                    <button class="btn btn-success" (click)="approveClient(client)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Approve
+                    </button>
+                    <button class="btn btn-danger" (click)="rejectClient(client)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                        Reject
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="filteredClients.length === 0" class="empty-state">
+                <p>No client requests found</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,104 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="container">
+            <div class="flex-between">
+                <div>
+                    <h2>Client-Trainer Mapping</h2>
+                    <p>Assign trainers to client requirements</p>
+                </div>
+                <a routerLink="/admin" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="mapping-grid grid grid-2">
+            <!-- Clients Section -->
+            <div class="section-card glass-card-solid">
+                <h3>Approved Clients</h3>
+                <p class="section-desc">Select a client to assign a trainer</p>
+
+                <div class="list-container">
+                    <div *ngFor="let client of approvedClients" class="list-item"
+                        [class.selected]="selectedClient?.id === client.id" (click)="selectClient(client)">
+                        <div class="item-header">
+                            <h4>{{client.name}}</h4>
+                            <span class="company-tag">{{client.companyName}}</span>
+                        </div>
+                        <div class="item-details">
+                            <span class="detail-badge">{{client.technology}}</span>
+                            <span class="detail-text">{{client.duration}}</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="approvedClients.length === 0" class="empty-message">
+                        No approved clients available
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trainers Section -->
+            <div class="section-card glass-card-solid">
+                <h3>Available Trainers</h3>
+                <p class="section-desc">Select a trainer to assign</p>
+
+                <div class="list-container">
+                    <div *ngFor="let trainer of approvedTrainers" class="list-item"
+                        [class.selected]="selectedTrainer?.id === trainer.id"
+                        [class.suggested]="hasMatchingSkill(trainer)" (click)="selectTrainer(trainer)">
+                        <div class="item-header">
+                            <h4>{{trainer.name}}</h4>
+                            <span *ngIf="hasMatchingSkill(trainer)" class="match-badge">✓ Skill Match</span>
+                        </div>
+                        <div class="item-details">
+                            <span class="detail-text">{{trainer.experience}}</span>
+                            <span class="detail-text">${{trainer.expectedRate}}/hr</span>
+                        </div>
+                        <div class="skills-preview">
+                            <span *ngFor="let skill of trainer.skills.slice(0, 3)" class="skill-mini">{{skill}}</span>
+                            <span *ngIf="trainer.skills.length > 3" class="skill-mini">+{{trainer.skills.length -
+                                3}}</span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="approvedTrainers.length === 0" class="empty-message">
+                        No approved trainers available
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mapping Form -->
+        <div class="mapping-form glass-card-solid" *ngIf="selectedClient && selectedTrainer">
+            <h3>Create Training Assignment</h3>
+
+            <div class="mapping-summary">
+                <div class="summary-item">
+                    <label>Client</label>
+                    <p>{{selectedClient.name}} ({{selectedClient.companyName}})</p>
+                </div>
+                <div class="summary-item">
+                    <label>Trainer</label>
+                    <p>{{selectedTrainer.name}}</p>
+                </div>
+                <div class="summary-item">
+                    <label>Technology</label>
+                    <p>{{selectedClient.technology}}</p>
+                </div>
+                <div class="summary-item">
+                    <label>Duration</label>
+                    <p>{{selectedClient.duration}}</p>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Training Start Date *</label>
+                <input type="date" class="form-control" [(ngModel)]="startDate" required />
+            </div>
+
+            <button class="btn btn-primary btn-lg w-full" (click)="createMapping()">
+                Create Training Assignment
+            </button>
+        </div>
+    </div>
+</div>

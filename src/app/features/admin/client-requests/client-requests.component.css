@@ -1,0 +1,128 @@
+.page-container {
+    min-height: 100vh;
+    background: var(--gradient-dark);
+    padding-bottom: var(--spacing-xl);
+}
+
+.page-header {
+    background: var(--color-secondary-dark);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-lg) 0;
+    margin-bottom: var(--spacing-xl);
+}
+
+.page-header h2 {
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.page-header p {
+    color: var(--color-light-gray);
+    margin: 0;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 0.75rem 1.5rem;
+    background: var(--color-secondary-dark);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    color: var(--color-light-gray);
+    cursor: pointer;
+    transition: all var(--transition-base);
+    font-weight: 500;
+}
+
+.filter-tab:hover {
+    border-color: var(--color-accent-coral);
+    color: var(--color-white);
+}
+
+.filter-tab.active {
+    background: var(--gradient-primary);
+    border-color: transparent;
+    color: white;
+}
+
+.clients-grid {
+    display: grid;
+    gap: var(--spacing-md);
+}
+
+.client-card {
+    padding: var(--spacing-lg);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-md);
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-header h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
+}
+
+.company {
+    color: var(--color-accent-coral);
+    font-weight: 500;
+    margin: 0;
+}
+
+.card-body {
+    margin-bottom: var(--spacing-md);
+}
+
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.info-item label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-light-gray);
+    margin-bottom: 0.25rem;
+}
+
+.info-item p {
+    color: var(--color-white);
+    font-weight: 500;
+    margin: 0;
+}
+
+.card-actions {
+    display: flex;
+    gap: var(--spacing-sm);
+    padding-top: var(--spacing-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.empty-state {
+    text-align: center;
+    padding: var(--spacing-xxl);
+    color: var(--color-light-gray);
+}
+
+@media (max-width: 768px) {
+    .info-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-actions {
+        flex-direction: column;
+    }
+}

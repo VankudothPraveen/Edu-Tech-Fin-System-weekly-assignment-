@@ -1,0 +1,140 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="flex-between">
+                <div>
+                    <h1>PO Management</h1>
+                    <p>Generate and manage purchase orders</p>
+                </div>
+                <a routerLink="/admin" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab" [class.active]="activeTab === 'client'" (click)="activeTab = 'client'">
+                Client POs ({{clientPOs.length}})
+            </button>
+            <button class="tab" [class.active]="activeTab === 'trainer'" (click)="activeTab = 'trainer'">
+                Trainer POs ({{trainerPOs.length}})
+            </button>
+        </div>
+
+        <!-- Client POs Tab -->
+        <div *ngIf="activeTab === 'client'" class="tab-content">
+            <h2>Client Purchase Orders</h2>
+
+            <div *ngIf="clientPOs.length === 0" class="empty-state">
+                <p>No client POs generated yet</p>
+            </div>
+
+            <div class="po-grid">
+                <div *ngFor="let po of clientPOs" class="po-card glass-card-solid">
+                    <div class="card-header">
+                        <h3>{{po.poNumber}}</h3>
+                        <span class="badge badge-approved">{{po.status}}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="detail-row">
+                            <label>Client:</label>
+                            <p>{{getClientName(po.clientId!)}}</p>
+                        </div>
+                        <div class="detail-row">
+                            <label>Amount:</label>
+                            <p><strong>${{po.amount}}</strong></p>
+                        </div>
+                        <div class="detail-row">
+                            <label>Description:</label>
+                            <p>{{po.description}}</p>
+                        </div>
+                        <div class="detail-row">
+                            <label>Generated:</label>
+                            <p>{{po.generatedAt | date:'medium'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trainer POs Tab -->
+        <div *ngIf="activeTab === 'trainer'" class="tab-content">
+            <h2>Trainer Purchase Orders</h2>
+
+            <!-- Generate Trainer PO Section -->
+            <div class="section">
+                <h3>Generate Trainer PO</h3>
+                <p class="section-description">Select an ongoing training to generate a PO for the trainer</p>
+
+                <div class="trainings-grid">
+                    <div *ngFor="let training of getOngoingTrainings()" class="training-card glass-card-solid">
+                        <div class="card-header">
+                            <h4>{{training.technology}}</h4>
+                            <span class="badge badge-ongoing">{{training.status}}</span>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Trainer:</strong> {{getTrainerName(training.trainerId)}}</p>
+                            <p><strong>Client:</strong> {{getClientName(training.clientId)}}</p>
+                            <p><strong>Duration:</strong> {{training.duration}}</p>
+                            <p><strong>Start Date:</strong> {{training.startDate | date}}</p>
+
+                            <button *ngIf="canGenerateTrainerPO(training)" class="btn btn-primary"
+                                (click)="generateTrainerPO(training)" style="margin-top: 1rem;">
+                                Generate Trainer PO
+                            </button>
+                            <span *ngIf="!canGenerateTrainerPO(training)" class="badge badge-approved"
+                                style="margin-top: 1rem;">
+                                PO Already Generated
+                            </span>
+                        </div>
+                    </div>
+
+                    <div *ngIf="getOngoingTrainings().length === 0" class="empty-state">
+                        <p>No ongoing trainings available</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Existing Trainer POs -->
+            <div class="section" style="margin-top: 3rem;">
+                <h3>Generated Trainer POs</h3>
+
+                <div *ngIf="trainerPOs.length === 0" class="empty-state">
+                    <p>No trainer POs generated yet</p>
+                </div>
+
+                <div class="po-grid">
+                    <div *ngFor="let po of trainerPOs" class="po-card glass-card-solid">
+                        <div class="card-header">
+                            <h3>{{po.poNumber}}</h3>
+                            <span class="badge badge-approved">{{po.status}}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="detail-row">
+                                <label>Trainer:</label>
+                                <p>{{getTrainerName(po.trainerId!)}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Training:</label>
+                                <p>{{getTrainingInfo(po.trainingId!)}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Amount:</label>
+                                <p><strong>${{po.amount}}</strong></p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Description:</label>
+                                <p>{{po.description}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Generated:</label>
+                                <p>{{po.generatedAt | date:'medium'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

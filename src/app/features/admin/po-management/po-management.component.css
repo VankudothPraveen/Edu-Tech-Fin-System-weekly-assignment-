@@ -1,0 +1,167 @@
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--secondary-dark);
+}
+
+.tab {
+    padding: 1rem 2rem;
+    background: transparent;
+    border: none;
+    color: var(--light-gray);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab:hover {
+    color: var(--accent-pink);
+}
+
+.tab.active {
+    color: var(--accent-coral);
+    border-bottom-color: var(--accent-coral);
+}
+
+.tab-content {
+    animation: fadeIn 0.3s ease;
+}
+
+.po-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.po-card {
+    padding: 1.5rem;
+}
+
+.po-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(214, 214, 214, 0.1);
+}
+
+.po-card .card-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--accent-coral);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+}
+
+.detail-row label {
+    font-weight: 500;
+    color: var(--light-gray);
+    opacity: 0.8;
+    min-width: 100px;
+}
+
+.detail-row p {
+    margin: 0;
+    color: var(--light-gray);
+    text-align: right;
+    flex: 1;
+}
+
+.section {
+    margin-top: 2rem;
+}
+
+.section h3 {
+    margin-bottom: 0.5rem;
+    color: var(--light-gray);
+}
+
+.section-description {
+    color: var(--light-gray);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+}
+
+.trainings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.training-card {
+    padding: 1.5rem;
+}
+
+.training-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(214, 214, 214, 0.1);
+}
+
+.training-card .card-header h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--accent-pink);
+}
+
+.training-card .card-body p {
+    margin: 0.5rem 0;
+    color: var(--light-gray);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--light-gray);
+    opacity: 0.6;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+
+    .po-grid,
+    .trainings-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .tab {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--secondary-dark);
+    }
+
+    .tab.active {
+        border-bottom-color: var(--accent-coral);
+        border-left: 3px solid var(--accent-coral);
+    }
+}

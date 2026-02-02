@@ -1,0 +1,160 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="flex-between">
+                <div>
+                    <h1>Invoice Management</h1>
+                    <p>Review trainer invoices and generate client invoices</p>
+                </div>
+                <a routerLink="/admin" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab" [class.active]="activeTab === 'trainer'" (click)="activeTab = 'trainer'">
+                Trainer Invoices ({{trainerInvoices.length}})
+            </button>
+            <button class="tab" [class.active]="activeTab === 'client'" (click)="activeTab = 'client'">
+                Client Invoices ({{clientInvoices.length}})
+            </button>
+        </div>
+
+        <!-- Trainer Invoices Tab -->
+        <div *ngIf="activeTab === 'trainer'" class="tab-content">
+            <h2>Trainer Invoices</h2>
+
+            <!-- Pending Trainer Invoices -->
+            <div class="section">
+                <h3>Pending Review ({{getPendingTrainerInvoices().length}})</h3>
+                <p class="section-description">Review and approve trainer invoices to generate client invoices</p>
+
+                <div *ngIf="getPendingTrainerInvoices().length === 0" class="empty-state">
+                    <p>No pending trainer invoices</p>
+                </div>
+
+                <div class="invoice-grid">
+                    <div *ngFor="let invoice of getPendingTrainerInvoices()" class="invoice-card glass-card-solid">
+                        <div class="card-header">
+                            <h3>{{invoice.invoiceNumber}}</h3>
+                            <span class="badge badge-pending">{{invoice.status}}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="detail-row">
+                                <label>Trainer:</label>
+                                <p>{{getTrainerName(invoice.trainerId!)}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Training:</label>
+                                <p>{{getTrainingInfo(invoice.trainingId)}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Trainer Amount:</label>
+                                <p><strong>${{invoice.trainerAmount}}</strong></p>
+                            </div>
+                            <div class="detail-row">
+                                <label>GUVI Margin ({{profitMarginPercent}}%):</label>
+                                <p><strong class="profit">${{calculateProfit(invoice.trainerAmount!)}}</strong></p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Client Amount:</label>
+                                <p><strong class="total">${{calculateClientAmount(invoice.trainerAmount!)}}</strong></p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Submitted:</label>
+                                <p>{{invoice.submittedAt | date:'medium'}}</p>
+                            </div>
+
+                            <button class="btn btn-primary" (click)="approveAndGenerateClientInvoice(invoice)"
+                                style="margin-top: 1rem; width: 100%;">
+                                Approve & Generate Client Invoice
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Approved Trainer Invoices -->
+            <div class="section" style="margin-top: 3rem;">
+                <h3>Approved ({{getApprovedTrainerInvoices().length}})</h3>
+
+                <div *ngIf="getApprovedTrainerInvoices().length === 0" class="empty-state">
+                    <p>No approved trainer invoices yet</p>
+                </div>
+
+                <div class="invoice-grid">
+                    <div *ngFor="let invoice of getApprovedTrainerInvoices()" class="invoice-card glass-card-solid">
+                        <div class="card-header">
+                            <h3>{{invoice.invoiceNumber}}</h3>
+                            <span class="badge badge-approved">{{invoice.status}}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="detail-row">
+                                <label>Trainer:</label>
+                                <p>{{getTrainerName(invoice.trainerId!)}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Training:</label>
+                                <p>{{getTrainingInfo(invoice.trainingId)}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Amount:</label>
+                                <p><strong>${{invoice.trainerAmount}}</strong></p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Approved:</label>
+                                <p>{{invoice.approvedAt | date:'medium'}}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Client Invoices Tab -->
+        <div *ngIf="activeTab === 'client'" class="tab-content">
+            <h2>Client Invoices</h2>
+
+            <div *ngIf="clientInvoices.length === 0" class="empty-state">
+                <p>No client invoices generated yet</p>
+            </div>
+
+            <div class="invoice-grid">
+                <div *ngFor="let invoice of clientInvoices" class="invoice-card glass-card-solid">
+                    <div class="card-header">
+                        <h3>{{invoice.invoiceNumber}}</h3>
+                        <span class="badge badge-approved">{{invoice.status}}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="detail-row">
+                            <label>Client:</label>
+                            <p>{{getClientName(invoice.clientId!)}}</p>
+                        </div>
+                        <div class="detail-row">
+                            <label>Training:</label>
+                            <p>{{getTrainingInfo(invoice.trainingId)}}</p>
+                        </div>
+                        <div class="detail-row breakdown">
+                            <label>Trainer Amount:</label>
+                            <p>${{invoice.trainerAmount}}</p>
+                        </div>
+                        <div class="detail-row breakdown">
+                            <label>GUVI Margin:</label>
+                            <p class="profit">+${{invoice.guviMargin}}</p>
+                        </div>
+                        <div class="detail-row total-row">
+                            <label>Total Client Amount:</label>
+                            <p><strong class="total">${{invoice.clientAmount}}</strong></p>
+                        </div>
+                        <div class="detail-row">
+                            <label>Generated:</label>
+                            <p>{{invoice.submittedAt | date:'medium'}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

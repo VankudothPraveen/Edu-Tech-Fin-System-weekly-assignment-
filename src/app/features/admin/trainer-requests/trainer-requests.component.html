@@ -1,0 +1,109 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="container">
+            <div class="flex-between">
+                <div>
+                    <h2>Trainer Requests</h2>
+                    <p>Review and hire trainers</p>
+                </div>
+                <a routerLink="/admin" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab" [class.active]="filter === 'all'" (click)="filter = 'all'; applyFilter()">
+                All ({{trainers.length}})
+            </button>
+            <button class="filter-tab" [class.active]="filter === 'PENDING_APPROVAL'"
+                (click)="filter = 'PENDING_APPROVAL'; applyFilter()">
+                Pending ({{pendingCount}})
+            </button>
+            <button class="filter-tab" [class.active]="filter === 'APPROVED'"
+                (click)="filter = 'APPROVED'; applyFilter()">
+                Approved ({{approvedCount}})
+            </button>
+            <button class="filter-tab" [class.active]="filter === 'REJECTED'"
+                (click)="filter = 'REJECTED'; applyFilter()">
+                Rejected ({{rejectedCount}})
+            </button>
+        </div>
+
+        <!-- Trainers List -->
+        <div class="trainers-grid">
+            <div *ngFor="let trainer of filteredTrainers" class="trainer-card glass-card-solid">
+                <div class="card-header">
+                    <div>
+                        <h3>{{trainer.name}}</h3>
+                        <p class="email">{{trainer.email}}</p>
+                    </div>
+                    <span class="badge" [ngClass]="getStatusClass(trainer.status)">{{trainer.status}}</span>
+                </div>
+
+                <div class="card-body">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Age</label>
+                            <p>{{trainer.age}} years</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Gender</label>
+                            <p>{{trainer.gender}}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Experience</label>
+                            <p>{{trainer.experience}}</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Expected Rate</label>
+                            <p>${{trainer.expectedRate}}/hr</p>
+                        </div>
+                    </div>
+
+                    <div class="skills-section">
+                        <label>Skills</label>
+                        <div class="skills-list">
+                            <span *ngFor="let skill of trainer.skills" class="skill-tag">{{skill}}</span>
+                        </div>
+                    </div>
+
+                    <div class="resume-section" *ngIf="trainer.resumeFileName">
+                        <label>Resume</label>
+                        <button class="btn btn-outline btn-sm" (click)="viewResume(trainer)">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                            </svg>
+                            {{trainer.resumeFileName}}
+                        </button>
+                    </div>
+                </div>
+
+                <div class="card-actions" *ngIf="trainer.status === 'PENDING_APPROVAL'">
+                    <button class="btn btn-success" (click)="hireTrainer(trainer)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                        Hire
+                    </button>
+                    <button class="btn btn-danger" (click)="rejectTrainer(trainer)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                        Reject
+                    </button>
+                </div>
+            </div>
+
+            <div *ngIf="filteredTrainers.length === 0" class="empty-state">
+                <p>No trainer requests found</p>
+            </div>
+        </div>
+    </div>
+</div>

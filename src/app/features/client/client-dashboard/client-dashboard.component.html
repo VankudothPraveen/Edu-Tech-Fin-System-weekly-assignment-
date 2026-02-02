@@ -1,0 +1,133 @@
+<div class="dashboard-container">
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="flex-between">
+                <div>
+                    <h1>Client Dashboard</h1>
+                    <p *ngIf="client">Welcome, {{client.name}}!</p>
+                </div>
+                <button class="btn btn-secondary" (click)="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" *ngIf="client">
+        <!-- Request Status -->
+        <div class="status-card glass-card-solid">
+            <div class="status-header">
+                <h3>Training Request Status</h3>
+                <span class="badge" [ngClass]="'badge-' + client.status.toLowerCase()">{{client.status}}</span>
+            </div>
+
+            <div class="request-details">
+                <div class="detail-item">
+                    <label>Company</label>
+                    <p>{{client.companyName}}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Technology</label>
+                    <p>{{client.technology}}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Duration</label>
+                    <p>{{client.duration}}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Expected Start</label>
+                    <p>{{client.expectedStartDate | date}}</p>
+                </div>
+            </div>
+
+            <div class="status-message" *ngIf="client.status === 'REQUESTED'">
+                <p>⏳ Your training request is pending admin approval.</p>
+            </div>
+
+
+            <div class="status-message success" *ngIf="client.status === 'APPROVED'">
+                <p>✅ Your request has been approved! You can now generate a PO.</p>
+                <button *ngIf="!clientPO" class="btn btn-primary" (click)="generatePO()" style="margin-top: 1rem;">
+                    Generate Purchase Order
+                </button>
+            </div>
+
+            <div class="status-message error" *ngIf="client.status === 'REJECTED'">
+                <p>❌ Your training request was rejected.</p>
+            </div>
+        </div>
+
+        <!-- PO Details (if generated) -->
+        <div class="status-card glass-card-solid" *ngIf="clientPO" style="margin-top: 2rem;">
+            <div class="status-header">
+                <h3>Purchase Order Details</h3>
+                <span class="badge badge-approved">{{clientPO.status}}</span>
+            </div>
+
+            <div class="request-details">
+                <div class="detail-item">
+                    <label>PO Number</label>
+                    <p><strong>{{clientPO.poNumber}}</strong></p>
+                </div>
+                <div class="detail-item">
+                    <label>Amount</label>
+                    <p><strong>${{clientPO.amount}}</strong></p>
+                </div>
+                <div class="detail-item">
+                    <label>Description</label>
+                    <p>{{clientPO.description}}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Generated On</label>
+                    <p>{{clientPO.generatedAt | date:'medium'}}</p>
+                </div>
+            </div>
+
+            <div class="status-message success">
+                <p>✅ Your Purchase Order has been generated successfully!</p>
+            </div>
+        </div>
+
+        <!-- Ongoing Trainings -->
+        <div class="section">
+            <h2>Ongoing Trainings</h2>
+            <div class="trainings-grid">
+                <div *ngFor="let training of ongoingTrainings" class="training-card glass-card-solid">
+                    <div class="card-header">
+                        <h3>{{training.technology}}</h3>
+                        <span class="badge badge-ongoing">{{training.status}}</span>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Trainer:</strong> {{getTrainerName(training.trainerId)}}</p>
+                        <p><strong>Duration:</strong> {{training.duration}}</p>
+                        <p><strong>Start Date:</strong> {{training.startDate | date}}</p>
+                    </div>
+                </div>
+
+                <div *ngIf="ongoingTrainings.length === 0" class="empty-state">
+                    <p>No ongoing trainings</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Trainings -->
+        <div class="section">
+            <h2>Completed Trainings</h2>
+            <div class="trainings-grid">
+                <div *ngFor="let training of completedTrainings" class="training-card glass-card-solid">
+                    <div class="card-header">
+                        <h3>{{training.technology}}</h3>
+                        <span class="badge badge-completed">{{training.status}}</span>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Trainer:</strong> {{getTrainerName(training.trainerId)}}</p>
+                        <p><strong>Duration:</strong> {{training.duration}}</p>
+                        <p><strong>Completed:</strong> {{training.completedAt | date}}</p>
+                    </div>
+                </div>
+
+                <div *ngIf="completedTrainings.length === 0" class="empty-state">
+                    <p>No completed trainings yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

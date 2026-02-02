@@ -1,0 +1,173 @@
+.tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--secondary-dark);
+}
+
+.tab {
+    padding: 1rem 2rem;
+    background: transparent;
+    border: none;
+    color: var(--light-gray);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+}
+
+.tab:hover {
+    color: var(--accent-pink);
+}
+
+.tab.active {
+    color: var(--accent-coral);
+    border-bottom-color: var(--accent-coral);
+}
+
+.tab-content {
+    animation: fadeIn 0.3s ease;
+}
+
+.invoice-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.invoice-card {
+    padding: 1.5rem;
+}
+
+.invoice-card .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(214, 214, 214, 0.1);
+}
+
+.invoice-card .card-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: var(--accent-coral);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+}
+
+.detail-row label {
+    font-weight: 500;
+    color: var(--light-gray);
+    opacity: 0.8;
+    min-width: 140px;
+}
+
+.detail-row p {
+    margin: 0;
+    color: var(--light-gray);
+    text-align: right;
+    flex: 1;
+}
+
+.detail-row.breakdown {
+    padding-left: 1rem;
+    border-left: 2px solid var(--accent-pink);
+    opacity: 0.8;
+}
+
+.detail-row.total-row {
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 2px solid rgba(214, 214, 214, 0.2);
+}
+
+.profit {
+    color: var(--accent-pink) !important;
+}
+
+.total {
+    color: var(--accent-coral) !important;
+    font-size: 1.1rem;
+}
+
+.section {
+    margin-top: 2rem;
+}
+
+.section h3 {
+    margin-bottom: 0.5rem;
+    color: var(--light-gray);
+}
+
+.section-description {
+    color: var(--light-gray);
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: var(--light-gray);
+    opacity: 0.6;
+}
+
+.badge-pending {
+    background: rgba(255, 193, 7, 0.2);
+    color: #ffc107;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .invoice-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tabs {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .tab {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid var(--secondary-dark);
+    }
+
+    .tab.active {
+        border-bottom-color: var(--accent-coral);
+        border-left: 3px solid var(--accent-coral);
+    }
+
+    .detail-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .detail-row label {
+        min-width: auto;
+    }
+
+    .detail-row p {
+        text-align: left;
+    }
+}

@@ -1,0 +1,47 @@
+<div class="auth-container">
+    <div class="container">
+        <div class="auth-card glass-card-solid">
+            <div class="auth-header">
+                <button class="btn-back" (click)="goBack()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <h2>{{roleTitle}} Login</h2>
+                <p>Welcome back! Please login to your account.</p>
+            </div>
+
+            <form (ngSubmit)="onLogin()" class="auth-form">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" [(ngModel)]="email" name="email"
+                        placeholder="Enter your email" [class.error]="errorMessage" required />
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" [(ngModel)]="password" name="password"
+                        placeholder="Enter your password" [class.error]="errorMessage" required />
+                </div>
+
+                <div *ngIf="errorMessage" class="error-alert">
+                    {{errorMessage}}
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-full" [disabled]="isLoading">
+                    <span *ngIf="!isLoading">Login</span>
+                    <span *ngIf="isLoading" class="spinner"></span>
+                </button>
+
+                <div *ngIf="canRegister" class="auth-footer">
+                    <p>Don't have an account? <a (click)="goToRegister()" class="link">Register here</a></p>
+                </div>
+
+                <div *ngIf="role === 'admin'" class="admin-hint">
+                    <p class="help-text">Admin credentials: admin@guvi.com / admin123</p>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
