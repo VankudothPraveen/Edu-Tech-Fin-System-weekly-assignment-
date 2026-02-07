@@ -1,59 +1,155 @@
-# TechFinancialSystem
+# 🎓 Tech Financial System - Ed-Tech Platform
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+A comprehensive financial management system for educational technology platforms that enables seamless coordination between trainers, clients, and administrators with milestone-based training tracking, purchase order management, and automated invoicing.
 
-## Development server
+![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Angular](https://img.shields.io/badge/Angular-18.0.0-red.svg)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.5.2-blue.svg)
 
-To start a local development server, run:
+## 📋 Table of Contents
 
-```bash
-ng serve
-```
+- [Overview](#overview)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [System Architecture](#system-architecture)
+- [Installation](#installation)
+- [Usage](#usage)
+- [User Roles](#user-roles)
+- [Workflow](#workflow)
+- [Screenshots](#screenshots)
+- [Contributing](#contributing)
+- [License](#license)
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## 🌟 Overview
 
-## Code scaffolding
+The Tech Financial System is a full-featured educational platform management system designed to streamline the entire lifecycle of training programs - from client registration to trainer payment. The system handles milestone-based training progress, intelligent trainer-client matching, purchase order generation with profit margin management, and automated invoice processing.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+### Key Highlights
 
-```bash
-ng generate component component-name
-```
+- ✅ **Role-Based Access Control** - Separate dashboards for Admin, Trainer, and Client
+- ✅ **Milestone-Based Training** - Monthly module tracking with progress visualization
+- ✅ **Smart Matching System** - AI-powered trainer-client pairing based on skills
+- ✅ **Financial Automation** - Automated PO generation and invoice processing
+- ✅ **Real-Time Notifications** - Instant updates for all stakeholders
+- ✅ **Profit Margin Management** - Flexible profit calculation for admin
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🚀 Features
 
-```bash
-ng generate --help
-```
+### For Administrators
 
-## Building
+- **Dashboard Analytics**
+  - Real-time statistics (pending requests, active trainings, revenue)
+  - Recent activity feed with dynamic updates
+  - Progress tracking across all trainings
+  
+- **User Management**
+  - Approve/reject trainer applications
+  - Approve/reject client requests
+  - View detailed profiles with skills and requirements
 
-To build the project run:
+- **Trainer-Client Mapping**
+  - Intelligent skill-based matching
+  - Visual skill match indicators
+  - One-click training assignment creation
 
-```bash
-ng build
-```
+- **Purchase Order Management**
+  - View client-generated POs
+  - Process POs with custom profit margins
+  - Automatic trainer PO generation
+  - Real-time profit calculations
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- **Invoice Management**
+  - Approve/reject trainer invoices
+  - Send payment reminders to clients
+  - Mark invoices as paid
+  - Track payment history
 
-## Running unit tests
+- **Progress Tracking**
+  - View all training milestones
+  - Monitor completion percentages
+  - Track client and trainer activities
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+- **Reporting**
+  - Generate monthly performance reports
+  - Download reports in PDF format
+  - Comprehensive financial summaries
 
-```bash
-ng test
-```
+### For Trainers
 
-## Running end-to-end tests
+- **Application System**
+  - Register with skills, experience, and expected rate
+  - Upload resume
+  - Track application status (Pending/Approved/Rejected)
 
-For end-to-end (e2e) testing, run:
+- **Training Dashboard**
+  - View assigned trainings with client details
+  - Track ongoing and completed trainings
+  - Monitor total earnings
 
-```bash
-ng e2e
-```
+- **Milestone Management**
+  - View client-completed milestones
+  - Verify milestone completion
+  - Track training progress
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+- **Purchase Order Viewing**
+  - See generated POs with amounts
+  - View profit margin deductions
+  - Track PO status
 
-## Additional Resources
+- **Invoice Generation**
+  - Generate invoices after all milestones verified
+  - Auto-populated from PO amounts
+  - Submit invoices to admin
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- **Payment Reminders**
+  - Send payment reminders to admin
+  - Track submitted invoice status
+
+### For Clients
+
+- **Registration**
+  - Provide company details and training requirements
+  - Specify technology needs and budget
+  - Set expected start dates
+
+- **Training Management**
+  - View assigned trainers with skills
+  - Monitor training progress
+  - Track training duration
+
+- **Milestone Tracking**
+  - View monthly training milestones
+  - Mark milestones as completed
+  - Visual progress bars
+  - Status indicators (Pending/In Progress/Completed)
+
+- **Purchase Order Generation**
+  - Generate POs for approved trainings
+  - Automatic amount calculation
+  - Instant admin notification
+
+- **Training Verification**
+  - Verify completed trainings
+  - Trigger invoice generation process
+  - Provide feedback
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **Framework**: Angular 18.0.0
+- **Language**: TypeScript 5.5.2
+- **Styling**: CSS3 with custom animations
+- **Routing**: Angular Router
+- **Forms**: Reactive Forms & Template-driven Forms
+
+### State Management
+- **Local Storage** - For data persistence
+- **RxJS** - For reactive programming
+- **Services** - Singleton pattern for shared state
+
+### Build Tools
+- **Angular CLI** - Development and build automation
+- **TypeScript Compiler** - Type checking and transpilation
+- **Webpack** - Module bundling (via Angular CLI)
+
+## 🏗️ System Architecture
