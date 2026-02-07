@@ -7,6 +7,7 @@ import { Training } from '../../../models/training';
 import { Trainer } from '../../../models/trainer';
 import { Client } from '../../../models/client';
 import { NotificationService } from '../../../shared/notification.service';
+import { AuthService } from '../../../auth/auth-service';
 
 @Component({
     selector: 'app-invoice-management',
@@ -21,7 +22,10 @@ export class InvoiceManagementComponent implements OnInit {
     activeTab: 'trainer' | 'client' = 'trainer';
     profitMarginPercent = 20; // 20% profit margin
 
-    constructor(private notificationService: NotificationService) { }
+    constructor(
+        private notificationService: NotificationService,
+        private authService: AuthService
+    ) { }
 
     ngOnInit(): void {
         this.loadInvoices();
@@ -126,5 +130,76 @@ export class InvoiceManagementComponent implements OnInit {
 
     getApprovedTrainerInvoices(): Invoice[] {
         return this.trainerInvoices.filter(inv => inv.status === 'APPROVED');
+    }
+
+    remindClientPayment(clientInvoice: Invoice): void {
+        if (!clientInvoice.clientId) return;
+
+        const clientName = this.getClientName(clientInvoice.clientId);
+
+        // Send reminder to client
+        this.authService.createNotification({
+            recipientId: clientInvoice.clientId,
+            recipientRole: 'client',
+            message: `Payment Reminder: Invoice ${clientInvoice.invoiceNumber} is pending. Amount: $${clientInvoice.clientAmount}`,
+            type: 'warning',
+            timestamp: new Date(),
+            read: false
+        });
+
+        alert(`✅ Payment Reminder Sent!\n\nClient: ${clientName}\nInvoice: ${clientInvoice.invoiceNumber}\nAmount: $${clientInvoice.clientAmount}\n\nClient has been notified about the pending payment.`);
+        this.notificationService.success(`Payment reminder sent to ${clientName}`);
+    }
+
+    markTrainerInvoicePaid(invoice: Invoice): void {
+        const invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+        const invIndex = invoices.findIndex((inv: Invoice) => inv.id === invoice.id);
+        
+        if (invIndex !== -1) {
+            invoices[invIndex].status = 'PAID';
+            invoices[invIndex].paidAt = new Date().toISOString();
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            
+            // Notify trainer
+            if (invoice.trainerId) {
+                this.authService.createNotification({
+                    recipientId: invoice.trainerId,
+                    recipientRole: 'trainer',
+                    message: `Payment Received! Invoice ${invoice.invoiceNumber} has been paid. Amount: $${invoice.trainerAmount}`,
+                    type: 'success',
+                    timestamp: new Date(),
+                    read: false
+                });
+            }
+            
+            this.loadInvoices();
+            this.notificationService.success('Trainer invoice marked as paid');
+        }
+    }
+
+    markClientInvoicePaid(invoice: Invoice): void {
+        const invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+        const invIndex = invoices.findIndex((inv: Invoice) => inv.id === invoice.id);
+        
+        if (invIndex !== -1) {
+            invoices[invIndex].status = 'PAID';
+            invoices[invIndex].paidAt = new Date().toISOString();
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            
+            // Notify client
+            if (invoice.clientId) {
+                this.authService.createNotification({
+                    recipientId: invoice.clientId,
+                    recipientRole: 'client',
+                    message: `Payment Received! Thank you for paying Invoice ${invoice.invoiceNumber}. Amount: $${invoice.clientAmount}`,
+                    type: 'success',
+                    timestamp: new Date(),
+                    read: false
+                });
+            }
+            
+            this.loadInvoices();
+            this.notificationService.success('Client invoice marked as paid');
+        }
     }
 }

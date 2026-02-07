@@ -1,5 +1,5 @@
 export type POType = 'CLIENT_PO' | 'TRAINER_PO';
-export type POStatus = 'GENERATED' | 'SENT' | 'ACKNOWLEDGED';
+export type POStatus = 'GENERATED' | 'SENT' | 'ACKNOWLEDGED' | 'PROCESSED';
 
 export interface PO {
     id: string;
@@ -9,6 +9,11 @@ export interface PO {
     trainingId?: string;
     clientId?: string; // For CLIENT_PO
     trainerId?: string; // For TRAINER_PO
+    
+    clientPOId?: string; // Reference to original client PO (for TRAINER_PO)
+    originalAmount?: number; // Original amount from client
+    profitMargin?: number; // Admin profit percentage
+    adminProfit?: number; // Calculated profit amount
 
     amount: number;
     description: string;
@@ -17,4 +22,6 @@ export interface PO {
     generatedAt: string;
     sentAt?: string;
     acknowledgedAt?: string;
+    processedAt?: string;
+    processedBy?: string; // Admin who processed it
 }

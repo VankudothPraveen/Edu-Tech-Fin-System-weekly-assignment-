@@ -1,174 +1,206 @@
-<div class="auth-container">
-    <div class="container">
-        <div class="auth-card glass-card-solid">
-            <div class="auth-header">
-                <button class="btn-back" (click)="goBack()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <path d="M19 12H5M12 19l-7-7 7-7" />
-                    </svg>
-                </button>
-                <h2>{{roleTitle}} Registration</h2>
-                <p>Create your account to get started</p>
+<div class="register-container">
+    <!-- Header with Role Tabs -->
+    <div class="register-header">
+        <button class="back-btn" (click)="goBack()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+        </button>
+        
+        <div class="role-tabs">
+            <button 
+                class="role-tab" 
+                [class.active]="role === 'admin'"
+                (click)="switchRole('admin')"
+                [disabled]="true">
+                Admin
+            </button>
+            <button 
+                class="role-tab" 
+                [class.active]="role === 'trainer'"
+                (click)="switchRole('trainer')"
+                [disabled]="true">
+                Trainer
+            </button>
+            <button 
+                class="role-tab" 
+                [class.active]="role === 'client'"
+                (click)="switchRole('client')"
+                [disabled]="true">
+                Client
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Form Content -->
+    <div class="register-content">
+        <form (ngSubmit)="onRegister()" class="register-form">
+            <!-- Personal Information Section -->
+            <div class="form-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-input" [(ngModel)]="name" name="name" placeholder="Enter username" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Firstname</label>
+                        <input type="text" class="form-input" [(ngModel)]="firstname" name="firstname" placeholder="Enter firstname" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Middlename</label>
+                        <input type="text" class="form-input" [(ngModel)]="middlename" name="middlename" placeholder="Enter middlename" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Surname</label>
+                        <input type="text" class="form-input" [(ngModel)]="surname" name="surname" placeholder="Enter surname" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <div class="phone-input-group">
+                            <span class="phone-code">+234</span>
+                            <input type="tel" class="form-input" [(ngModel)]="phone" name="phone" placeholder="801 234 5678" required />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">E-mail</label>
+                        <input type="email" class="form-input" [(ngModel)]="email" name="email" placeholder="your@email.com" required />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Enter password</label>
+                        <input type="password" class="form-input" [(ngModel)]="password" name="password" placeholder="Enter password" required />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-input" [(ngModel)]="address" name="address" placeholder="Your address" required />
+                    </div>
+                </div>
             </div>
 
-            <form (ngSubmit)="onRegister()" class="auth-form">
-                <!-- Common Fields -->
-                <div class="grid grid-2">
+            <!-- Role-Specific Fields -->
+            <div class="form-section" *ngIf="isClient">
+                <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Full Name *</label>
-                        <input type="text" class="form-control" [(ngModel)]="name" name="name"
-                            placeholder="Enter your name" required />
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-input" [(ngModel)]="companyName" name="companyName" placeholder="Your company" required />
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label">Email Address *</label>
-                        <input type="email" class="form-control" [(ngModel)]="email" name="email"
-                            placeholder="Enter your email" required />
+                        <label class="form-label">Technology Required</label>
+                        <input type="text" class="form-input" [(ngModel)]="technology" name="technology" placeholder="e.g., Angular, React" required />
                     </div>
                 </div>
 
-                <div class="grid grid-2">
+                <div class="form-row">
                     <div class="form-group">
-                        <label class="form-label">Password *</label>
-                        <input type="password" class="form-control" [(ngModel)]="password" name="password"
-                            placeholder="Min. 6 characters" required />
+                        <label class="form-label">Duration</label>
+                        <input type="text" class="form-input" [(ngModel)]="duration" name="duration" placeholder="e.g., 3 months" required />
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label">Confirm Password *</label>
-                        <input type="password" class="form-control" [(ngModel)]="confirmPassword" name="confirmPassword"
-                            placeholder="Re-enter password" required />
+                        <label class="form-label">Expected Start Date</label>
+                        <input type="date" class="form-input" [(ngModel)]="expectedStartDate" name="expectedStartDate" required />
                     </div>
                 </div>
 
-                <!-- Client-Specific Fields -->
-                <div *ngIf="isClient">
-                    <h4 class="section-title">Company & Training Details</h4>
-
-                    <div class="grid grid-2">
-                        <div class="form-group">
-                            <label class="form-label">Phone Number *</label>
-                            <input type="tel" class="form-control" [(ngModel)]="phone" name="phone"
-                                placeholder="+1 234 567 8900" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Company Name *</label>
-                            <input type="text" class="form-control" [(ngModel)]="companyName" name="companyName"
-                                placeholder="Your company" required />
-                        </div>
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label class="form-label">Budget (Optional)</label>
+                        <input type="number" class="form-input" [(ngModel)]="budget" name="budget" placeholder="Enter budget amount" />
                     </div>
+                </div>
+            </div>
 
-                    <div class="grid grid-2">
-                        <div class="form-group">
-                            <label class="form-label">Technology Required *</label>
-                            <input type="text" class="form-control" [(ngModel)]="technology" name="technology"
-                                placeholder="e.g., Angular, React" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Duration *</label>
-                            <input type="text" class="form-control" [(ngModel)]="duration" name="duration"
-                                placeholder="e.g., 3 months" required />
-                        </div>
+            <div class="form-section" *ngIf="isTrainer">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Age</label>
+                        <input type="number" class="form-input" [(ngModel)]="age" name="age" placeholder="Your age" required />
                     </div>
-
-                    <div class="grid grid-2">
-                        <div class="form-group">
-                            <label class="form-label">Expected Start Date *</label>
-                            <input type="date" class="form-control" [(ngModel)]="expectedStartDate"
-                                name="expectedStartDate" required />
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Budget (Optional)</label>
-                            <input type="number" class="form-control" [(ngModel)]="budget" name="budget"
-                                placeholder="Enter budget" />
-                        </div>
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select class="form-input" [(ngModel)]="gender" name="gender" required>
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Experience</label>
+                        <input type="text" class="form-input" [(ngModel)]="experience" name="experience" placeholder="e.g., 5 years" required />
                     </div>
                 </div>
 
-                <!-- Trainer-Specific Fields -->
-                <div *ngIf="isTrainer">
-                    <h4 class="section-title">Professional Details</h4>
-
-                    <div class="grid grid-3">
-                        <div class="form-group">
-                            <label class="form-label">Age *</label>
-                            <input type="number" class="form-control" [(ngModel)]="age" name="age"
-                                placeholder="Your age" required />
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label class="form-label">Skills / Technologies</label>
+                        <div class="skill-input-container">
+                            <input type="text" class="form-input" [(ngModel)]="skillInput" name="skillInput" placeholder="Add a skill and press Enter" (keyup.enter)="addSkill()" />
+                            <button type="button" class="add-skill-btn" (click)="addSkill()">Add</button>
                         </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Gender *</label>
-                            <select class="form-control" [(ngModel)]="gender" name="gender" required>
-                                <option value="Male">Male</option>
-                                <option value="Female">Female</option>
-                                <option value="Other">Other</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Experience *</label>
-                            <input type="text" class="form-control" [(ngModel)]="experience" name="experience"
-                                placeholder="e.g., 5 years" required />
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">Skills / Technologies *</label>
-                        <div class="skill-input-group">
-                            <input type="text" class="form-control" [(ngModel)]="skillInput" name="skillInput"
-                                placeholder="Add a skill" (keyup.enter)="addSkill()" />
-                            <button type="button" class="btn btn-secondary" (click)="addSkill()">Add</button>
-                        </div>
-                        <div class="skills-list" *ngIf="skills.length > 0">
+                        <div class="skills-display" *ngIf="skills.length > 0">
                             <span *ngFor="let skill of skills" class="skill-tag">
                                 {{skill}}
-                                <button type="button" (click)="removeSkill(skill)">×</button>
+                                <button type="button" class="remove-skill" (click)="removeSkill(skill)">×</button>
                             </span>
                         </div>
                     </div>
+                </div>
 
-                    <div class="grid grid-2">
-                        <div class="form-group">
-                            <label class="form-label">Resume Upload *</label>
-                            <div class="file-upload">
-                                <input type="file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx" />
-                                <div class="file-upload-label">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                        fill="none" stroke="currentColor" stroke-width="2">
-                                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                                        <polyline points="17 8 12 3 7 8" />
-                                        <line x1="12" y1="3" x2="12" y2="15" />
-                                    </svg>
-                                    <span>{{resumeFileName || 'Upload Resume'}}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Expected Rate (per hour) *</label>
-                            <input type="number" class="form-control" [(ngModel)]="expectedRate" name="expectedRate"
-                                placeholder="Enter rate" required />
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Resume Upload</label>
+                        <div class="file-upload-container">
+                            <input type="file" (change)="onFileSelected($event)" accept=".pdf,.doc,.docx" id="resume-upload" />
+                            <label for="resume-upload" class="file-upload-label">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                    <polyline points="17 8 12 3 7 8" />
+                                    <line x1="12" y1="3" x2="12" y2="15" />
+                                </svg>
+                                <span>{{resumeFileName || 'Upload Resume'}}</span>
+                            </label>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label class="form-label">Expected Rate (per hour)</label>
+                        <input type="number" class="form-input" [(ngModel)]="expectedRate" name="expectedRate" placeholder="Enter rate" required />
+                    </div>
                 </div>
+            </div>
 
-                <div *ngIf="errorMessage" class="error-alert">
-                    {{errorMessage}}
-                </div>
+            <!-- Error Message -->
+            <div *ngIf="errorMessage" class="error-message">
+                {{errorMessage}}
+            </div>
 
-                <button type="submit" class="btn btn-primary btn-lg w-full" [disabled]="isLoading">
+            <!-- Terms and Conditions -->
+            <div class="terms-container">
+                <label class="checkbox-label">
+                    <input type="checkbox" [(ngModel)]="agreeToTerms" name="agreeToTerms" required />
+                    <span>I agree to the terms & conditions</span>
+                </label>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-actions">
+                <button type="submit" class="register-btn" [disabled]="isLoading || !agreeToTerms">
                     <span *ngIf="!isLoading">Register</span>
-                    <span *ngIf="isLoading" class="spinner"></span>
+                    <span *ngIf="isLoading" class="loading-spinner"></span>
                 </button>
+            </div>
 
-                <div class="auth-footer">
-                    <p>Already have an account? <a (click)="goToLogin()" class="link">Login here</a></p>
-                </div>
-            </form>
-        </div>
+            <!-- Login Link -->
+            <div class="form-footer">
+                <p>Already have an account? <a (click)="goToLogin()" class="login-link">Login here</a></p>
+            </div>
+        </form>
     </div>
 </div>

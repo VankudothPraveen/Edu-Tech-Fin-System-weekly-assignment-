@@ -1,131 +1,527 @@
-.role-selection-container {
+/* ============================================
+   MODERN DARK AUTHENTICATION UI
+   ============================================ */
+
+/* Full-screen background with charcoal/dark gradient */
+.auth-container {
     min-height: 100vh;
+    background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: var(--spacing-lg);
-}
-
-.main-title {
-    font-size: 3rem;
-    background: var(--gradient-primary);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: var(--spacing-sm);
-}
-
-.subtitle {
-    font-size: 1.25rem;
-    color: var(--color-light-gray);
-    margin-bottom: var(--spacing-xl);
-}
-
-.role-cards {
-    margin-top: var(--spacing-xl);
-}
-
-.role-card {
-    text-align: center;
-    cursor: pointer;
-    padding: var(--spacing-xl);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    color: #ffffff;
     position: relative;
     overflow: hidden;
 }
 
-.role-card::before {
-    content: '';
+/* Dev Tools Button */
+.dev-tools-btn {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    background: rgba(168, 85, 247, 0.2);
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    color: #c084fc;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.dev-tools-btn:hover {
+    background: rgba(168, 85, 247, 0.3);
+    border-color: rgba(168, 85, 247, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Show Accounts Button */
+.show-accounts-btn {
+    position: fixed;
+    top: 3.5rem;
+    right: 1rem;
+    background: rgba(34, 197, 94, 0.2);
+    border: 1px solid rgba(34, 197, 94, 0.4);
+    color: #4ade80;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.show-accounts-btn:hover {
+    background: rgba(34, 197, 94, 0.3);
+    border-color: rgba(34, 197, 94, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Clear Data Button */
+.clear-data-btn {
+    position: fixed;
+    top: 6rem;
+    right: 1rem;
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    color: #f87171;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.clear-data-btn:hover {
+    background: rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.6);
+    transform: translateY(-2px);
+}
+
+.auth-background {
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: var(--gradient-primary);
-    transform: scaleX(0);
-    transition: transform var(--transition-base);
+    bottom: 0;
+    z-index: 0;
 }
 
-.role-card:hover::before {
-    transform: scaleX(1);
+.background-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+        radial-gradient(circle at 60% 20%, rgba(255, 255, 255, 0.01) 0%, transparent 50%);
+    background-size: 200% 200%;
+    animation: backgroundShift 20s ease-in-out infinite;
 }
 
-.role-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto var(--spacing-md);
+@keyframes backgroundShift {
+    0%, 100% { transform: rotate(0deg); }
+    50% { transform: rotate(180deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Centered card with soft shadow and rounded corners */
+.auth-card {
+    background: rgba(30, 30, 30, 0.8);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 4rem;
+    width: 100%;
+    max-width: 600px;
+    min-height: 600px;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 
+        0 30px 80px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.15);
+}
+
+/* Header text - Center aligned, modern sans-serif font */
+.auth-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.auth-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    letter-spacing: -0.5px;
+}
+
+.auth-subtitle {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+    margin: 0;
+}
+
+/* Role tabs with sliding animation */
+.role-tabs {
+    margin-bottom: 3rem;
+}
+
+.tabs-container {
+    position: relative;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 4px;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.tab-indicator {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: calc(33.333% - 8px);
+    height: calc(100% - 8px);
+    background: linear-gradient(90deg, #FF6B6B, #F58F7C);
+    border-radius: 8px;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 16px rgba(255, 107, 124, 0.4);
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    position: relative;
+    z-index: 2;
+}
+
+.tab-btn:hover {
+    color: rgba(255, 255, 255, 0.7);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-btn.active {
+    color: #ffffff;
+    font-weight: 600;
+    background: transparent;
+}
+
+/* Auth toggle styled as rounded pill */
+.auth-toggle {
+    display: flex;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 4px;
+    margin-bottom: 3rem;
+    gap: 4px;
+}
+
+.toggle-btn {
+    flex: 1;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 12px;
+}
+
+.toggle-btn:hover {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+.toggle-btn.active {
+    background: linear-gradient(90deg, #FF6B6B, #F58F7C);
+    color: #ffffff;
+    font-weight: 600;
+    box-shadow: 0 4px 16px rgba(255, 107, 124, 0.4);
+}
+
+/* Form content area */
+.form-content {
+    min-height: 250px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.form-group {
+    position: relative;
+}
+
+.input-group {
+    position: relative;
+}
+
+.form-input {
+    width: 100%;
+    padding: 1.25rem 1.5rem;
+    font-size: 1.1rem;
+    font-family: inherit;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.form-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.form-input:focus {
+    border-color: #FF6B6B;
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 0 0 4px rgba(255, 107, 124, 0.2);
+    transform: translateY(-1px);
+}
+
+.submit-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1.25rem 2rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: inherit;
+    outline: none;
+    background: linear-gradient(135deg, #FF6B6B, #F58F7C);
+    color: #ffffff;
+    width: 100%;
+}
+
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(255, 107, 124, 0.4);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn-spinner {
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .auth-card {
+        margin: 1rem;
+        padding: 2rem;
+        max-width: 400px;
+    }
+    
+    .auth-title {
+        font-size: 2rem;
+    }
+    
+    .auth-subtitle {
+        font-size: 1rem;
+    }
+    
+    .role-tabs {
+        margin-bottom: 1.5rem;
+    }
+    
+    .tab-btn {
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .toggle-btn {
+        font-size: 0.75rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .submit-btn {
+        font-size: 0.875rem;
+        padding: 0.875rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        margin: 0.5rem;
+        padding: 1.5rem;
+        max-width: 350px;
+    }
+    
+    .auth-title {
+        font-size: 1.75rem;
+    }
+    
+    .auth-subtitle {
+        font-size: 0.875rem;
+    }
+    
+    .role-tabs {
+        margin-bottom: 1rem;
+    }
+    
+    .tab-btn {
+        font-size: 0.625rem;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .toggle-btn {
+        font-size: 0.625rem;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .submit-btn {
+        font-size: 0.75rem;
+        padding: 0.75rem 1.25rem;
+    }
+}
+
+/* Error message */
+.error-message {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* Checkbox label */
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.875rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #3b82f6;
+}
+
+.checkbox-label span {
+    flex: 1;
+}
+
+.checkbox-label:hover {
+    color: rgba(255, 255, 255, 1);
+}
+
+/* Form label */
+.form-label {
+    display: block;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+/* Skill input container */
+.skill-input-container {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn-add-skill {
+    background: #3b82f6;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-add-skill:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+/* Skills list */
+.skills-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.skill-tag {
+    background: rgba(59, 130, 246, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.4);
+    color: #60a5fa;
+    padding: 0.4rem 0.75rem;
+    border-radius: 16px;
+    font-size: 0.875rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.skill-remove {
+    background: none;
+    border: none;
+    color: #60a5fa;
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    width: 18px;
+    height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: all var(--transition-base);
+    transition: all 0.2s ease;
 }
 
-.admin-icon {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+.skill-remove:hover {
+    background: rgba(239, 68, 68, 0.2);
+    color: #ef4444;
 }
 
-.trainer-icon {
-    background: var(--gradient-primary);
-    color: white;
-}
-
-.client-icon {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
-}
-
-.role-card:hover .role-icon {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.role-card h3 {
-    font-size: 1.75rem;
-    margin-bottom: var(--spacing-sm);
-}
-
-.role-card p {
-    color: var(--color-light-gray);
-    margin-bottom: var(--spacing-md);
-}
-
-.role-badge {
-    display: inline-block;
-    padding: 0.5rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: var(--radius-full);
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: var(--color-accent-coral);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.help-text {
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 1rem;
-}
-
-@media (max-width: 768px) {
-    .main-title {
-        font-size: 2rem;
-    }
-
-    .subtitle {
-        font-size: 1rem;
-    }
-
-    .role-card {
-        padding: var(--spacing-md);
-    }
-
-    .role-icon {
-        width: 60px;
-        height: 60px;
-    }
-
-    .role-icon svg {
-        width: 32px;
-        height: 32px;
-    }
+/* Select styling */
+select.form-input {
+    cursor: pointer;
 }

@@ -19,9 +19,14 @@ export class RegisterComponent implements OnInit {
 
     // Common fields
     name = '';
+    firstname = '';
+    middlename = '';
+    surname = '';
     email = '';
     password = '';
     confirmPassword = '';
+    address = '';
+    agreeToTerms = false;
 
     // Client-specific fields
     phone = '';
@@ -109,22 +114,24 @@ export class RegisterComponent implements OnInit {
     }
 
     private async createClientProfile(userId: string): Promise<void> {
-        const clients = JSON.parse(localStorage.getItem('clients') || '[]');
-        const client: Client = {
-            id: `client-${Date.now()}`,
+        const clientProfile = {
+            id: userId,
             userId,
             name: this.name,
             email: this.email,
             phone: this.phone,
+            address: this.address,
             companyName: this.companyName,
             technology: this.technology,
             duration: this.duration,
             expectedStartDate: this.expectedStartDate,
-            budget: this.budget || undefined,
-            status: 'REQUESTED' as ClientStatus,
+            budget: this.budget,
+            status: 'REQUESTED',
             createdAt: new Date().toISOString()
         };
-        clients.push(client);
+
+        const clients = JSON.parse(localStorage.getItem('clients') || '[]');
+        clients.push(clientProfile);
         localStorage.setItem('clients', JSON.stringify(clients));
     }
 
@@ -165,8 +172,13 @@ export class RegisterComponent implements OnInit {
     }
 
     private validateForm(): boolean {
-        if (!this.name || !this.email || !this.password || !this.confirmPassword) {
+        if (!this.name || !this.email || !this.password || !this.confirmPassword || !this.address) {
             this.errorMessage = 'Please fill in all required fields';
+            return false;
+        }
+
+        if (!this.agreeToTerms) {
+            this.errorMessage = 'Please agree to the terms and conditions';
             return false;
         }
 
@@ -203,6 +215,12 @@ export class RegisterComponent implements OnInit {
 
     goBack(): void {
         this.router.navigate(['/']);
+    }
+
+    switchRole(newRole: UserRole): void {
+        // This method is kept for completeness but tabs are disabled
+        // Users should navigate from the welcome page to select roles
+        console.log('Role switching disabled - navigate from welcome page');
     }
 
     get roleTitle(): string {

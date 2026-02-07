@@ -6,147 +6,336 @@
                     <h1>Admin Dashboard</h1>
                     <p>GUVI Training Management System</p>
                 </div>
-                <button class="btn btn-secondary" (click)="logout()">Logout</button>
+                <div class="header-actions">
+                    <button class="btn btn-outline" (click)="refreshData()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="23 4 23 10 17 10"/>
+                            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
+                        </svg>
+                        Refresh
+                    </button>
+                    <button class="btn btn-secondary" (click)="logout()">Logout</button>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="container">
-        <!-- Stats Overview -->
-        <div class="stats-grid grid grid-4">
-            <div class="stat-card glass-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
+        <!-- Real-time Stats Overview -->
+        <div class="stats-section">
+            <h2>Real-time Overview</h2>
+            <div class="stats-grid grid grid-4">
+                <div class="stat-card glass-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{stats.pendingClients}}</h3>
+                        <p>Pending Clients</p>
+                        <div class="stat-change positive" *ngIf="clientChange > 0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                            </svg>
+                            +{{clientChange}} today
+                        </div>
+                    </div>
                 </div>
-                <div class="stat-content">
-                    <h3>{{stats.pendingClients}}</h3>
-                    <p>Pending Clients</p>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-icon" style="background: var(--gradient-primary);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{stats.pendingTrainers}}</h3>
+                        <p>Pending Trainers</p>
+                        <div class="stat-change positive" *ngIf="trainerChange > 0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                            </svg>
+                            +{{trainerChange}} today
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card" (click)="navigateToOngoingTrainings()" style="cursor: pointer;">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{stats.ongoingTrainings}}</h3>
+                        <p>Ongoing Trainings</p>
+                        <div class="progress-bar">
+                            <div class="progress-fill" [style.width.%]="stats.averageProgress"></div>
+                        </div>
+                        <small>Avg Progress: {{stats.averageProgress | number:'1.0'}}%</small>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="1" x2="12" y2="23" />
+                            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>${{stats.totalRevenue | number:'1.0-0'}}</h3>
+                        <p>Total Revenue</p>
+                        <div class="stat-change positive" *ngIf="revenueChange > 0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                            </svg>
+                            +${{revenueChange | number:'1.0-0'}} this month
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="stat-card glass-card">
-                <div class="stat-icon" style="background: var(--gradient-primary);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                        <circle cx="12" cy="7" r="4" />
-                    </svg>
+            <!-- Additional Stats Row -->
+            <div class="stats-grid grid grid-3" style="margin-top: 1rem;">
+                <div class="stat-card glass-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #FF9800 0%, #F57C00 100%);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{stats.pendingPOs}}</h3>
+                        <p>Pending POs</p>
+                    </div>
                 </div>
-                <div class="stat-content">
-                    <h3>{{stats.pendingTrainers}}</h3>
-                    <p>Pending Trainers</p>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #9C27B0 0%, #7B1FA2 100%);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2" />
+                            <line x1="2" y1="10" x2="22" y2="10" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{stats.pendingInvoices}}</h3>
+                        <p>Pending Invoices</p>
+                        <div class="stat-change negative" *ngIf="stats.overdueInvoices > 0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/>
+                            </svg>
+                            {{stats.overdueInvoices}} overdue
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card glass-card">
+                    <div class="stat-icon" style="background: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4" />
+                            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                        </svg>
+                    </div>
+                    <div class="stat-content">
+                        <h3>{{stats.completedTrainings}}</h3>
+                        <p>Completed Trainings</p>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <div class="stat-card glass-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10" />
-                        <polyline points="12 6 12 12 16 14" />
-                    </svg>
+        <!-- Quick Actions & Export Options -->
+        <div class="actions-section">
+            <h2>Quick Actions & Exports</h2>
+            <div class="actions-grid">
+                <div class="action-group">
+                    <h3>Data Exports</h3>
+                    <div class="export-buttons">
+                        <button class="btn btn-outline" (click)="exportToExcel('clients')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Export Clients
+                        </button>
+                        <button class="btn btn-outline" (click)="exportToExcel('trainers')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Export Trainers
+                        </button>
+                        <button class="btn btn-outline" (click)="exportToExcel('purchaseOrders')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Export POs
+                        </button>
+                        <button class="btn btn-outline" (click)="exportToExcel('invoices')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Export Invoices
+                        </button>
+                        <button class="btn btn-outline" (click)="exportToExcel('progress')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                                <polyline points="7 10 12 15 17 10" />
+                                <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            Export Progress
+                        </button>
+                    </div>
                 </div>
-                <div class="stat-content">
-                    <h3>{{stats.ongoingTrainings}}</h3>
-                    <p>Ongoing Trainings</p>
-                </div>
-            </div>
 
-            <div class="stat-card glass-card">
-                <div class="stat-icon" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="1" x2="12" y2="23" />
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-                    </svg>
-                </div>
-                <div class="stat-content">
-                    <h3>${{stats.totalRevenue}}</h3>
-                    <p>Total Revenue</p>
+                <div class="action-group">
+                    <h3>System Actions</h3>
+                    <div class="system-buttons">
+                        <button class="btn btn-primary" (click)="generateReports()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                <polyline points="14 2 14 8 20 8" />
+                                <line x1="16" y1="13" x2="8" y2="13" />
+                                <line x1="16" y1="17" x2="8" y2="17" />
+                            </svg>
+                            Generate Monthly Report
+                        </button>
+                        <button class="btn btn-secondary" (click)="sendReminders()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                <polyline points="22,6 12,13 2,6" />
+                            </svg>
+                            Send Payment Reminders
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- Navigation Cards -->
-        <div class="nav-grid grid grid-3">
-            <a routerLink="/admin/client-requests" class="nav-card glass-card">
-                <div class="nav-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="8.5" cy="7" r="4" />
-                        <polyline points="17 11 19 13 23 9" />
-                    </svg>
-                </div>
-                <h3>Client Requests</h3>
-                <p>Review and approve client training requests</p>
-                <span class="badge badge-requested" *ngIf="stats.pendingClients > 0">{{stats.pendingClients}}
-                    Pending</span>
-            </a>
+        <div class="nav-section">
+            <h2>Management Modules</h2>
+            <div class="nav-grid grid grid-3">
+                <a routerLink="/admin/client-requests" class="nav-card glass-card">
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="8.5" cy="7" r="4" />
+                            <polyline points="17 11 19 13 23 9" />
+                        </svg>
+                    </div>
+                    <h3>Client Requests</h3>
+                    <p>Review and approve client training requests</p>
+                    <span class="badge badge-requested" *ngIf="stats.pendingClients > 0">{{stats.pendingClients}} Pending</span>
+                </a>
 
-            <a routerLink="/admin/trainer-requests" class="nav-card glass-card">
-                <div class="nav-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                        <circle cx="9" cy="7" r="4" />
-                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    </svg>
-                </div>
-                <h3>Trainer Requests</h3>
-                <p>Review and hire trainers</p>
-                <span class="badge badge-pending" *ngIf="stats.pendingTrainers > 0">{{stats.pendingTrainers}}
-                    Pending</span>
-            </a>
+                <a routerLink="/admin/trainer-requests" class="nav-card glass-card">
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                    </div>
+                    <h3>Trainer Requests</h3>
+                    <p>Review and hire trainers</p>
+                    <span class="badge badge-pending" *ngIf="stats.pendingTrainers > 0">{{stats.pendingTrainers}} Pending</span>
+                </a>
 
-            <a routerLink="/admin/mapping" class="nav-card glass-card">
-                <div class="nav-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <circle cx="18" cy="5" r="3" />
-                        <circle cx="6" cy="12" r="3" />
-                        <circle cx="18" cy="19" r="3" />
-                        <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
-                        <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
-                    </svg>
-                </div>
-                <h3>Client-Trainer Mapping</h3>
-                <p>Assign trainers to client requirements</p>
-            </a>
+                <a routerLink="/admin/mapping" class="nav-card glass-card">
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="18" cy="5" r="3" />
+                            <circle cx="6" cy="12" r="3" />
+                            <circle cx="18" cy="19" r="3" />
+                            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+                        </svg>
+                    </div>
+                    <h3>Client-Trainer Mapping</h3>
+                    <p>Assign trainers to client requirements</p>
+                </a>
 
-            <a routerLink="/admin/po-management" class="nav-card glass-card">
-                <div class="nav-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                        <polyline points="14 2 14 8 20 8" />
-                        <line x1="16" y1="13" x2="8" y2="13" />
-                        <line x1="16" y1="17" x2="8" y2="17" />
-                        <polyline points="10 9 9 9 8 9" />
-                    </svg>
-                </div>
-                <h3>PO Management</h3>
-                <p>Generate and manage purchase orders</p>
-            </a>
+                <a routerLink="/admin/po-management" class="nav-card glass-card">
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                            <line x1="16" y1="13" x2="8" y2="13" />
+                            <line x1="16" y1="17" x2="8" y2="17" />
+                            <polyline points="10 9 9 9 8 9" />
+                        </svg>
+                    </div>
+                    <h3>PO Management</h3>
+                    <p>Generate and manage purchase orders</p>
+                    <span class="badge badge-pending" *ngIf="stats.pendingPOs > 0">{{stats.pendingPOs}} Pending</span>
+                </a>
 
-            <a routerLink="/admin/invoice-management" class="nav-card glass-card">
-                <div class="nav-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
-                        stroke="currentColor" stroke-width="2">
-                        <rect x="2" y="5" width="20" height="14" rx="2" />
-                        <line x1="2" y1="10" x2="22" y2="10" />
-                    </svg>
+                <a routerLink="/admin/invoice-management" class="nav-card glass-card">
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="5" width="20" height="14" rx="2" />
+                            <line x1="2" y1="10" x2="22" y2="10" />
+                        </svg>
+                    </div>
+                    <h3>Invoice Management</h3>
+                    <p>Review trainer invoices and generate client invoices</p>
+                    <span class="badge badge-pending" *ngIf="stats.pendingInvoices > 0">{{stats.pendingInvoices}} Pending</span>
+                </a>
+
+                <a routerLink="/admin/progress-tracking" class="nav-card glass-card">
+                    <div class="nav-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                        </svg>
+                    </div>
+                    <h3>Progress Tracking</h3>
+                    <p>Monitor training progress and milestones</p>
+                    <span class="badge badge-ongoing">{{stats.ongoingTrainings}} Active</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- Recent Activity Feed -->
+        <div class="activity-section">
+            <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>Recent Activity</h2>
+                <button class="btn btn-outline" (click)="refreshData()" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
+                    🔄 Refresh
+                </button>
+            </div>
+            <div class="activity-feed">
+                <div *ngFor="let activity of recentActivities" class="activity-item">
+                    <div class="activity-icon" [ngClass]="activity.type">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                            <polyline points="22 4 12 14.01 9 11.01" />
+                        </svg>
+                    </div>
+                    <div class="activity-content">
+                        <p>{{activity.description}}</p>
+                        <small title="{{activity.timestamp | date:'medium'}}">{{getRelativeTime(activity.timestamp)}}</small>
+                    </div>
                 </div>
-                <h3>Invoice Management</h3>
-                <p>Review trainer invoices and generate client invoices</p>
-            </a>
+                <div *ngIf="recentActivities.length === 0" class="empty-state">
+                    <p>No recent activity</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

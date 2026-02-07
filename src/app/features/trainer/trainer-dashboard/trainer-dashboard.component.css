@@ -98,3 +98,279 @@
     padding: var(--spacing-xxl);
     color: var(--color-light-gray);
 }
+
+/* Header Actions */
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 1px solid var(--accent-coral);
+    color: var(--accent-coral);
+}
+
+.btn-outline:hover {
+    background: var(--accent-coral);
+    color: white;
+}
+
+/* PO Grid */
+.po-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.po-card {
+    padding: var(--spacing-lg);
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+}
+
+.detail-row label {
+    font-weight: 500;
+    color: var(--light-gray);
+    opacity: 0.8;
+    min-width: 100px;
+}
+
+.detail-row p {
+    margin: 0;
+    color: var(--light-gray);
+    text-align: right;
+    flex: 1;
+}
+
+.amount-text {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent-coral) !important;
+}
+
+.text-info {
+    color: #2196f3 !important;
+    font-size: 0.9rem;
+}
+
+/* Invoices Grid */
+.invoices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--spacing-md);
+}
+
+.invoice-card {
+    padding: var(--spacing-lg);
+}
+
+.text-success {
+    color: var(--accent-green) !important;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+    color: white;
+    border: none;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+    transform: translateY(-2px);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+    transform: translateY(-2px);
+}
+
+.info-box {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+/* Progress Section */
+.progress-section {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.progress-header strong {
+    color: var(--color-white);
+}
+
+.progress-header span {
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-accent));
+    transition: width 0.3s ease;
+}
+
+.progress-text {
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-light-gray);
+}
+
+/* Milestones Section */
+.milestones-section {
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.milestones-section h4 {
+    font-size: 1rem;
+    margin-bottom: var(--spacing-md);
+    color: var(--color-white);
+}
+
+.milestone-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.milestone-item {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    transition: all 0.3s ease;
+}
+
+.milestone-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.milestone-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--spacing-sm);
+}
+
+.milestone-header strong {
+    color: var(--color-white);
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+.milestone-desc {
+    color: var(--color-light-gray);
+    font-size: 0.875rem;
+    margin: 0.25rem 0;
+}
+
+.milestone-header small {
+    color: var(--color-info);
+    font-size: 0.75rem;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.milestone-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-sm);
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+}
+
+.info-text {
+    color: var(--color-info);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.success-text {
+    color: var(--color-success);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+@media (max-width: 768px) {
+    .invoices-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .po-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .header-actions {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .header-actions button {
+        width: 100%;
+    }
+    
+    .milestone-header {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+    
+    .milestone-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .milestone-actions button {
+        width: 100%;
+    }
+}

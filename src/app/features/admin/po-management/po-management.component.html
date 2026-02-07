@@ -34,7 +34,11 @@
                 <div *ngFor="let po of clientPOs" class="po-card glass-card-solid">
                     <div class="card-header">
                         <h3>{{po.poNumber}}</h3>
-                        <span class="badge badge-approved">{{po.status}}</span>
+                        <span class="badge" 
+                              [class.badge-approved]="po.status === 'GENERATED'"
+                              [class.badge-ongoing]="po.status === 'PROCESSED'">
+                            {{po.status}}
+                        </span>
                     </div>
                     <div class="card-body">
                         <div class="detail-row">
@@ -45,6 +49,10 @@
                             <label>Amount:</label>
                             <p><strong>${{po.amount}}</strong></p>
                         </div>
+                        <div *ngIf="po.profitMargin" class="detail-row">
+                            <label>Admin Profit ({{po.profitMargin}}%):</label>
+                            <p class="text-success"><strong>${{po.adminProfit}}</strong></p>
+                        </div>
                         <div class="detail-row">
                             <label>Description:</label>
                             <p>{{po.description}}</p>
@@ -53,6 +61,23 @@
                             <label>Generated:</label>
                             <p>{{po.generatedAt | date:'medium'}}</p>
                         </div>
+                        <div *ngIf="po.processedAt" class="detail-row">
+                            <label>Processed:</label>
+                            <p>{{po.processedAt | date:'medium'}}</p>
+                        </div>
+                        
+                        <!-- Process PO Button -->
+                        <button *ngIf="po.status === 'GENERATED'" 
+                                class="btn btn-primary" 
+                                (click)="openProcessingModal(po)"
+                                style="margin-top: 1rem; width: 100%;">
+                            Process PO & Create Trainer PO
+                        </button>
+                        <span *ngIf="po.status === 'PROCESSED'" 
+                              class="badge badge-approved"
+                              style="margin-top: 1rem; display: block; text-align: center;">
+                            ✓ Processed & Trainer PO Created
+                        </span>
                     </div>
                 </div>
             </div>
@@ -135,6 +160,72 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Processing Modal -->
+<div *ngIf="showProcessingModal" class="modal-overlay" (click)="closeProcessingModal()">
+    <div class="modal-content" (click)="$event.stopPropagation()" style="max-width: 600px;">
+        <div class="modal-header">
+            <h2>Process Client PO</h2>
+            <button class="close-btn" (click)="closeProcessingModal()">&times;</button>
+        </div>
+        
+        <div class="modal-body" *ngIf="selectedPOForProcessing">
+            <div class="info-section">
+                <h3>Client PO Details</h3>
+                <div class="detail-row">
+                    <label>PO Number:</label>
+                    <p><strong>{{selectedPOForProcessing.poNumber}}</strong></p>
+                </div>
+                <div class="detail-row">
+                    <label>Client:</label>
+                    <p>{{getClientName(selectedPOForProcessing.clientId!)}}</p>
+                </div>
+                <div class="detail-row">
+                    <label>Original Amount:</label>
+                    <p class="amount-large">${{selectedPOForProcessing.amount}}</p>
+                </div>
+            </div>
+
+            <div class="profit-section" style="margin-top: 2rem;">
+                <h3>Set Profit Margin</h3>
+                <div class="form-group">
+                    <label for="profitMargin">Admin Profit Margin (%):</label>
+                    <input 
+                        type="number" 
+                        id="profitMargin"
+                        [(ngModel)]="profitMarginPercent" 
+                        min="0" 
+                        max="100"
+                        step="1"
+                        class="form-control"
+                        style="font-size: 1.2rem; padding: 0.75rem;">
+                </div>
+
+                <div class="calculation-display" style="margin-top: 1.5rem; padding: 1.5rem; background: #f8f9fa; border-radius: 8px;">
+                    <div class="detail-row" style="border-bottom: 2px solid #dee2e6; padding-bottom: 1rem;">
+                        <label>Original Amount:</label>
+                        <p><strong>${{selectedPOForProcessing.amount}}</strong></p>
+                    </div>
+                    <div class="detail-row" style="padding-top: 1rem;">
+                        <label>Admin Profit ({{profitMarginPercent}}%):</label>
+                        <p class="text-success"><strong>- ${{calculateAdminProfit().toFixed(2)}}</strong></p>
+                    </div>
+                    <div class="detail-row" style="border-top: 2px solid #28a745; padding-top: 1rem; margin-top: 1rem;">
+                        <label style="font-size: 1.1rem;">Trainer PO Amount:</label>
+                        <p class="amount-large text-primary"><strong>${{calculateTrainerAmount().toFixed(2)}}</strong></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="btn btn-secondary" (click)="closeProcessingModal()">Cancel</button>
+            <button class="btn btn-primary" (click)="processClientPO()">
+                Process & Create Trainer PO
+            </button>
         </div>
     </div>
 </div>

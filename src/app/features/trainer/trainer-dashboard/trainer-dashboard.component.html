@@ -6,7 +6,12 @@
                     <h1>Trainer Dashboard</h1>
                     <p *ngIf="trainer">Welcome, {{trainer.name}}!</p>
                 </div>
-                <button class="btn btn-secondary" (click)="logout()">Logout</button>
+                <div class="header-actions">
+                    <button class="btn btn-outline" (click)="refreshData()">
+                        🔄 Refresh
+                    </button>
+                    <button class="btn btn-secondary" (click)="logout()">Logout</button>
+                </div>
             </div>
         </div>
     </div>
@@ -25,7 +30,7 @@
 
         <div *ngIf="trainer.status === 'APPROVED'">
             <!-- Stats -->
-            <div class="stats-grid grid grid-3">
+            <div class="stats-grid grid grid-4">
                 <div class="stat-card glass-card">
                     <h3>{{assignedTrainings.length}}</h3>
                     <p>Ongoing Trainings</p>
@@ -33,6 +38,10 @@
                 <div class="stat-card glass-card">
                     <h3>{{completedTrainings.length}}</h3>
                     <p>Completed Trainings</p>
+                </div>
+                <div class="stat-card glass-card">
+                    <h3>{{trainerPOs.length}}</h3>
+                    <p>Purchase Orders</p>
                 </div>
                 <div class="stat-card glass-card">
                     <h3>${{totalEarnings}}</h3>
@@ -53,11 +62,87 @@
                             <p><strong>Client:</strong> {{getClientName(training.clientId)}}</p>
                             <p><strong>Duration:</strong> {{training.duration}}</p>
                             <p><strong>Start Date:</strong> {{training.startDate | date}}</p>
+                            
+                            <!-- Progress Bar -->
+                            <div class="progress-section" *ngIf="training.milestones && training.milestones.length > 0">
+                                <div class="progress-header">
+                                    <strong>Progress</strong>
+                                    <span>{{training.completedMilestones || 0}} / {{training.totalMilestones || 0}} Milestones</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" [style.width.%]="training.progressPercentage || 0"></div>
+                                </div>
+                                <p class="progress-text">{{training.progressPercentage || 0}}% Complete</p>
+                            </div>
+
+                            <!-- Milestones -->
+                            <div class="milestones-section" *ngIf="training.milestones && training.milestones.length > 0">
+                                <h4>Training Modules</h4>
+                                <div class="milestone-list">
+                                    <div *ngFor="let milestone of training.milestones" class="milestone-item">
+                                        <div class="milestone-header">
+                                            <div>
+                                                <strong>{{milestone.title}}</strong>
+                                                <p class="milestone-desc">{{milestone.description}}</p>
+                                                <small *ngIf="milestone.dueDate">Due: {{milestone.dueDate | date:'mediumDate'}}</small>
+                                            </div>
+                                            <span class="badge" [ngClass]="getMilestoneStatusClass(milestone.status)">
+                                                {{getMilestoneStatusText(milestone.status)}}
+                                            </span>
+                                        </div>
+                                        <div class="milestone-actions">
+                                            <button 
+                                                *ngIf="canVerifyMilestone(milestone)" 
+                                                class="btn btn-sm btn-primary"
+                                                (click)="verifyMilestone(training, milestone)">
+                                                ✓ Verify Milestone
+                                            </button>
+                                            <span *ngIf="milestone.status === 'PENDING'" class="info-text">
+                                                ⏳ Waiting for client to complete
+                                            </span>
+                                            <span *ngIf="milestone.status === 'COMPLETED'" class="success-text">
+                                                ✅ Verified
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div *ngIf="assignedTrainings.length === 0" class="empty-state">
                         <p>No ongoing trainings assigned yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trainer Purchase Orders Section -->
+            <div class="section" *ngIf="trainerPOs.length > 0">
+                <h2>My Purchase Orders</h2>
+                <div class="po-grid">
+                    <div *ngFor="let po of trainerPOs" class="po-card glass-card-solid">
+                        <div class="card-header">
+                            <h3>{{po.poNumber}}</h3>
+                            <span class="badge badge-approved">{{po.status}}</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="detail-row">
+                                <label>Amount:</label>
+                                <p class="amount-text">${{po.amount}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Description:</label>
+                                <p>{{po.description}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Generated:</label>
+                                <p>{{po.generatedAt | date:'medium'}}</p>
+                            </div>
+                            <div *ngIf="po.profitMargin" class="detail-row">
+                                <label>Admin Margin:</label>
+                                <p class="text-info">{{po.profitMargin}}% (Original: ${{po.originalAmount}})</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -75,21 +160,111 @@
                             <p><strong>Client:</strong> {{getClientName(training.clientId)}}</p>
                             <p><strong>Duration:</strong> {{training.duration}}</p>
                             <p><strong>Completed:</strong> {{training.completedAt | date}}</p>
+                            
+                            <!-- Verification Status -->
+                            <div style="margin-top: 0.75rem; padding: 0.5rem; background: rgba(255,255,255,0.05); border-radius: 6px;">
+                                <p *ngIf="training.verifiedByClient" style="color: var(--accent-green); margin: 0;">
+                                    ✓ Verified by Client on {{training.verifiedAt | date:'short'}}
+                                </p>
+                                <p *ngIf="!training.verifiedByClient" style="color: var(--light-gray); opacity: 0.7; margin: 0;">
+                                    ⏳ Waiting for client verification...
+                                </p>
+                            </div>
 
+                            <!-- Invoice Actions -->
                             <div style="margin-top: 1rem;">
-                                <button *ngIf="!hasInvoice(training.id)" class="btn btn-primary"
-                                    (click)="submitInvoice(training)">
-                                    Submit Invoice
+                                <!-- Can Generate Invoice -->
+                                <button *ngIf="canGenerateInvoice(training)" 
+                                        class="btn btn-success"
+                                        (click)="submitInvoice(training)"
+                                        style="width: 100%;">
+                                    💰 Raise Invoice (${{getTrainerPO(training.id)?.amount}})
                                 </button>
-                                <span *ngIf="hasInvoice(training.id)" class="badge badge-approved">
-                                    Invoice {{getInvoiceStatus(training.id)}}
+                                
+                                <!-- Already Has Invoice -->
+                                <span *ngIf="hasInvoice(training.id)" 
+                                      class="badge badge-approved"
+                                      style="display: block; text-align: center; padding: 0.75rem;">
+                                    ✓ Invoice {{getInvoiceStatus(training.id)}}
                                 </span>
+                                
+                                <!-- Cannot Generate - Not all milestones completed -->
+                                <div *ngIf="!canGenerateInvoice(training) && !hasInvoice(training.id) && training.milestones && training.milestones.length > 0 && training.completedMilestones !== training.totalMilestones" 
+                                     class="info-box"
+                                     style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <p style="margin: 0; color: #ffc107;">⏳ Complete All Milestones First</p>
+                                    <small style="opacity: 0.8;">{{training.completedMilestones || 0}} of {{training.totalMilestones}} milestones completed</small>
+                                </div>
+                                
+                                <!-- Cannot Generate - Not Verified -->
+                                <div *ngIf="!canGenerateInvoice(training) && !hasInvoice(training.id) && !training.verifiedByClient && (!training.milestones || training.completedMilestones === training.totalMilestones)" 
+                                     class="info-box"
+                                     style="background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3); padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <p style="margin: 0; color: #ffc107;">⏳ Waiting for Client Verification</p>
+                                    <small style="opacity: 0.8;">Invoice button will be enabled after client verifies the training</small>
+                                </div>
+                                
+                                <!-- Cannot Generate - No PO -->
+                                <div *ngIf="!canGenerateInvoice(training) && !hasInvoice(training.id) && training.verifiedByClient && !getTrainerPO(training.id)" 
+                                     class="info-box"
+                                     style="background: rgba(33, 150, 243, 0.1); border: 1px solid rgba(33, 150, 243, 0.3); padding: 1rem; border-radius: 8px; text-align: center;">
+                                    <p style="margin: 0; color: #2196f3;">⏳ Waiting for Admin to Generate PO</p>
+                                    <small style="opacity: 0.8;">Admin needs to process and create your Purchase Order</small>
+                                </div>
                             </div>
                         </div>
                     </div>
 
                     <div *ngIf="completedTrainings.length === 0" class="empty-state">
                         <p>No completed trainings yet</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submitted Invoices Section -->
+            <div class="section" *ngIf="submittedInvoices.length > 0" style="margin-top: 3rem;">
+                <h2>Submitted Invoices</h2>
+                <div class="invoices-grid">
+                    <div *ngFor="let invoice of submittedInvoices" class="invoice-card glass-card-solid">
+                        <div class="card-header">
+                            <h3>{{invoice.invoiceNumber}}</h3>
+                            <span class="badge" 
+                                  [class.badge-ongoing]="invoice.status === 'SUBMITTED'"
+                                  [class.badge-approved]="invoice.status === 'APPROVED'"
+                                  [class.badge-completed]="invoice.status === 'PAID'">
+                                {{invoice.status}}
+                            </span>
+                        </div>
+                        <div class="card-body">
+                            <div class="detail-row">
+                                <label>Amount:</label>
+                                <p class="amount-text">${{invoice.trainerAmount}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Description:</label>
+                                <p>{{invoice.description}}</p>
+                            </div>
+                            <div class="detail-row">
+                                <label>Submitted:</label>
+                                <p>{{invoice.submittedAt | date:'medium'}}</p>
+                            </div>
+                            <div *ngIf="invoice.approvedAt" class="detail-row">
+                                <label>Approved:</label>
+                                <p>{{invoice.approvedAt | date:'medium'}}</p>
+                            </div>
+                            <div *ngIf="invoice.paidAt" class="detail-row">
+                                <label>Paid:</label>
+                                <p class="text-success">{{invoice.paidAt | date:'medium'}}</p>
+                            </div>
+                            
+                            <!-- Remind Payment Button -->
+                            <button *ngIf="invoice.status === 'SUBMITTED' || invoice.status === 'APPROVED'" 
+                                    class="btn btn-warning"
+                                    (click)="remindPayment(invoice)"
+                                    style="margin-top: 1rem; width: 100%;">
+                                <span style="margin-right: 0.5rem;">🔔</span> Remind Admin for Payment
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>

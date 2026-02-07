@@ -88,7 +88,11 @@
                     <div *ngFor="let invoice of getApprovedTrainerInvoices()" class="invoice-card glass-card-solid">
                         <div class="card-header">
                             <h3>{{invoice.invoiceNumber}}</h3>
-                            <span class="badge badge-approved">{{invoice.status}}</span>
+                            <span class="badge" 
+                                  [class.badge-approved]="invoice.status === 'APPROVED'"
+                                  [class.badge-completed]="invoice.status === 'PAID'">
+                                {{invoice.status}}
+                            </span>
                         </div>
                         <div class="card-body">
                             <div class="detail-row">
@@ -107,6 +111,23 @@
                                 <label>Approved:</label>
                                 <p>{{invoice.approvedAt | date:'medium'}}</p>
                             </div>
+                            <div *ngIf="invoice.paidAt" class="detail-row">
+                                <label>Paid At:</label>
+                                <p class="text-success">{{invoice.paidAt | date:'medium'}}</p>
+                            </div>
+                            
+                            <!-- Mark as Paid Button -->
+                            <button *ngIf="invoice.status !== 'PAID'" 
+                                    class="btn btn-primary" 
+                                    (click)="markTrainerInvoicePaid(invoice)"
+                                    style="margin-top: 1rem; width: 100%;">
+                                ✓ Mark as Paid
+                            </button>
+                            <span *ngIf="invoice.status === 'PAID'" 
+                                  class="badge badge-completed"
+                                  style="margin-top: 1rem; display: block; text-align: center; padding: 0.75rem;">
+                                ✓ Payment Completed
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -125,7 +146,12 @@
                 <div *ngFor="let invoice of clientInvoices" class="invoice-card glass-card-solid">
                     <div class="card-header">
                         <h3>{{invoice.invoiceNumber}}</h3>
-                        <span class="badge badge-approved">{{invoice.status}}</span>
+                        <span class="badge" 
+                              [class.badge-ongoing]="invoice.status === 'SUBMITTED'"
+                              [class.badge-approved]="invoice.status === 'APPROVED'"
+                              [class.badge-completed]="invoice.status === 'PAID'">
+                            {{invoice.status}}
+                        </span>
                     </div>
                     <div class="card-body">
                         <div class="detail-row">
@@ -151,6 +177,29 @@
                         <div class="detail-row">
                             <label>Generated:</label>
                             <p>{{invoice.submittedAt | date:'medium'}}</p>
+                        </div>
+                        <div *ngIf="invoice.paidAt" class="detail-row">
+                            <label>Paid At:</label>
+                            <p class="text-success">{{invoice.paidAt | date:'medium'}}</p>
+                        </div>
+                        
+                        <!-- Action Buttons -->
+                        <div *ngIf="invoice.status !== 'PAID'" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button class="btn btn-warning" 
+                                    (click)="remindClientPayment(invoice)"
+                                    style="flex: 1;">
+                                🔔 Remind Client
+                            </button>
+                            <button class="btn btn-primary" 
+                                    (click)="markClientInvoicePaid(invoice)"
+                                    style="flex: 1;">
+                                ✓ Mark as Paid
+                            </button>
+                        </div>
+                        <div *ngIf="invoice.status === 'PAID'" style="margin-top: 1rem;">
+                            <span class="badge badge-completed" style="display: block; text-align: center; padding: 0.75rem;">
+                                ✓ Payment Received
+                            </span>
                         </div>
                     </div>
                 </div>

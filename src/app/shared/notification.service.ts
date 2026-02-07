@@ -19,12 +19,14 @@ export class NotificationService {
     private toastId = 0;
 
     show(message: string, type: ToastType = 'info', duration: number = 3000): void {
+        console.log(`📣 Notification Service - Showing ${type} message:`, message);
         const toast: Toast = {
             id: ++this.toastId,
             type,
             message,
             duration
         };
+        console.log('📤 Emitting toast:', toast);
         this.toastSubject.next(toast);
     }
 

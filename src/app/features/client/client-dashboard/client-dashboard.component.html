@@ -99,6 +99,51 @@
                         <p><strong>Trainer:</strong> {{getTrainerName(training.trainerId)}}</p>
                         <p><strong>Duration:</strong> {{training.duration}}</p>
                         <p><strong>Start Date:</strong> {{training.startDate | date}}</p>
+                        
+                        <!-- Progress Bar -->
+                        <div class="progress-section" *ngIf="training.milestones && training.milestones.length > 0">
+                            <div class="progress-header">
+                                <strong>Progress</strong>
+                                <span>{{training.completedMilestones || 0}} / {{training.totalMilestones || 0}} Milestones</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" [style.width.%]="training.progressPercentage || 0"></div>
+                            </div>
+                            <p class="progress-text">{{training.progressPercentage || 0}}% Complete</p>
+                        </div>
+
+                        <!-- Milestones -->
+                        <div class="milestones-section" *ngIf="training.milestones && training.milestones.length > 0">
+                            <h4>Training Modules</h4>
+                            <div class="milestone-list">
+                                <div *ngFor="let milestone of training.milestones" class="milestone-item">
+                                    <div class="milestone-header">
+                                        <div>
+                                            <strong>{{milestone.title}}</strong>
+                                            <p class="milestone-desc">{{milestone.description}}</p>
+                                            <small *ngIf="milestone.dueDate">Due: {{milestone.dueDate | date:'mediumDate'}}</small>
+                                        </div>
+                                        <span class="badge" [ngClass]="getMilestoneStatusClass(milestone.status)">
+                                            {{getMilestoneStatusText(milestone.status)}}
+                                        </span>
+                                    </div>
+                                    <div class="milestone-actions">
+                                        <button 
+                                            *ngIf="canMarkMilestoneComplete(milestone)" 
+                                            class="btn btn-sm btn-primary"
+                                            (click)="markMilestoneComplete(training, milestone)">
+                                            Mark as Complete
+                                        </button>
+                                        <span *ngIf="milestone.status === 'IN_PROGRESS'" class="info-text">
+                                            ⏳ Waiting for trainer verification
+                                        </span>
+                                        <span *ngIf="milestone.status === 'COMPLETED'" class="success-text">
+                                            ✅ Verified on {{milestone.completedAt | date:'short'}}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

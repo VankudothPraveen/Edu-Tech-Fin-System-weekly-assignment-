@@ -1,0 +1,368 @@
+<div class="page-container">
+    <div class="page-header">
+        <div class="container">
+            <div class="flex-between">
+                <div>
+                    <h2>Training Progress Tracking</h2>
+                    <p>Monitor and manage ongoing training programs</p>
+                </div>
+                <a routerLink="/admin" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Overview Stats -->
+        <div class="stats-grid grid grid-3">
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #2196F3, #1976D2);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{ongoingTrainings.length}}</h3>
+                    <p>Ongoing Trainings</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #4CAF50, #45a049);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4" />
+                        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{completedTrainings.length}}</h3>
+                    <p>Completed Trainings</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #FF9800, #F57C00);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="8.5" cy="7" r="4" />
+                        <line x1="20" y1="8" x2="20" y2="14" />
+                        <line x1="23" y1="11" x2="17" y2="11" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{allTrainings.length}}</h3>
+                    <p>Total Trainings</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Dynamic Stats -->
+        <div class="stats-grid grid grid-4">
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #9C27B0, #7B1FA2);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                        <line x1="9" y1="9" x2="15" y2="9" />
+                        <line x1="9" y1="15" x2="15" y2="15" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{totalModules}}</h3>
+                    <p>Total Modules</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #00BCD4, #0097A7);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12" />
+                        <path d="M20 12v7a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{completedModules}}</h3>
+                    <p>Completed Modules</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #E91E63, #C2185B);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{activeClients}}</h3>
+                    <p>Active Clients</p>
+                </div>
+            </div>
+
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #795548, #5D4037);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                        <path d="M2 17l10 5 10-5" />
+                        <path d="M2 12l10 5 10-5" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{activeTrainers}}</h3>
+                    <p>Active Trainers</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Overview -->
+        <div class="progress-overview">
+            <div class="stat-card glass-card">
+                <div class="stat-icon" style="background: linear-gradient(135deg, #673AB7, #512DA8);">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" />
+                        <path d="M12 6v6l4 2" />
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <h3>{{averageProgress | number:'1.1'}}%</h3>
+                    <p>Average Progress</p>
+                    <div class="progress-bar">
+                        <div class="progress-fill" [style.width.%]="averageProgress"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="filter-tabs">
+            <button class="filter-tab" [class.active]="filter === 'all'" (click)="filter = 'all'; loadTrainingProgress()">
+                All ({{allTrainings.length}})
+            </button>
+            <button class="filter-tab" [class.active]="filter === 'IN_PROGRESS'"
+                (click)="filter = 'IN_PROGRESS'; loadTrainingProgress()">
+                In Progress ({{ongoingTrainings.length}})
+            </button>
+            <button class="filter-tab" [class.active]="filter === 'COMPLETED'"
+                (click)="filter = 'COMPLETED'; loadTrainingProgress()">
+                Completed ({{completedTrainings.length}})
+            </button>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoading" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Loading training progress...</p>
+        </div>
+
+        <!-- Training Lists -->
+        <div *ngIf="!isLoading" class="training-content">
+            <!-- Ongoing Trainings -->
+            <div *ngIf="filter === 'all' || filter === 'IN_PROGRESS'" class="section">
+                <h3>Ongoing Trainings</h3>
+                <div class="cards-grid">
+                    <div *ngFor="let training of (filter === 'all' ? ongoingTrainings : ongoingTrainings)" class="card glass-card" (click)="selectTraining(training)">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h4>{{training.technology}}</h4>
+                                <span class="badge badge-ongoing">{{training.status}}</span>
+                            </div>
+                            <div class="card-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" [style.width.%]="training.progressPercentage"></div>
+                                </div>
+                                <span class="progress-text">{{training.progressPercentage | number:'1.0'}}% Complete</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="info-row">
+                                <span class="label">Client:</span>
+                                <span class="value">{{getClientName(training.clientId)}}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Trainer:</span>
+                                <span class="value">{{getTrainerName(training.trainerId)}}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Progress:</span>
+                                <span class="value">{{training.completedModules}} / {{training.totalModules}} modules</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Started:</span>
+                                <span class="value">{{training.startDate | date:'short'}}</span>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <h5>Recent Milestones</h5>
+                            <div class="milestones-list">
+                                <div *ngFor="let milestone of training.milestones.slice(-3)" class="milestone-item" [class.completed]="milestone.completed">
+                                    <span class="milestone-icon">
+                                        <svg *ngIf="milestone.completed" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                        <svg *ngIf="!milestone.completed" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="8" cy="8" r="7" />
+                                        </svg>
+                                    </span>
+                                    <div class="milestone-content">
+                                        <span>{{milestone.title}}</span>
+                                        <small>{{milestone.dueDate | date:'short'}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="ongoingTrainings.length === 0" class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 12 16 14" />
+                        </svg>
+                        <h3>No Ongoing Trainings</h3>
+                        <p>There are currently no training programs in progress.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Trainings -->
+            <div *ngIf="filter === 'all' || filter === 'COMPLETED'" class="section">
+                <h3>Completed Trainings</h3>
+                <div class="cards-grid">
+                    <div *ngFor="let training of (filter === 'all' ? completedTrainings : completedTrainings)" class="card glass-card completed" (click)="selectTraining(training)">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h4>{{training.technology}}</h4>
+                                <span class="badge badge-completed">{{training.status}}</span>
+                            </div>
+                            <div class="card-progress">
+                                <div class="progress-bar">
+                                    <div class="progress-fill" [style.width.%]="100"></div>
+                                </div>
+                                <span class="progress-text">100% Complete</span>
+                            </div>
+                        </div>
+                        
+                        <div class="card-body">
+                            <div class="info-row">
+                                <span class="label">Client:</span>
+                                <span class="value">{{getClientName(training.clientId)}}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Trainer:</span>
+                                <span class="value">{{getTrainerName(training.trainerId)}}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Duration:</span>
+                                <span class="value">{{training.startDate | date:'short'}} - {{training.actualEndDate | date:'short'}}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="label">Modules:</span>
+                                <span class="value">{{training.completedModules}} / {{training.totalModules}}</span>
+                            </div>
+                        </div>
+
+                        <div class="card-footer">
+                            <h5>All Milestones Completed</h5>
+                            <div class="milestones-list">
+                                <div *ngFor="let milestone of training.milestones" class="milestone-item completed">
+                                    <span class="milestone-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <polyline points="20 6 9 17 4 12" />
+                                        </svg>
+                                    </span>
+                                    <div class="milestone-content">
+                                        <span>{{milestone.title}}</span>
+                                        <small>{{milestone.completedAt | date:'short'}}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div *ngIf="completedTrainings.length === 0" class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M9 11l3 3L22 4" />
+                            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                        </svg>
+                        <h3>No Completed Trainings</h3>
+                        <p>No training programs have been completed yet.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Training Detail Modal -->
+        <div *ngIf="selectedTraining" class="modal-overlay" (click)="selectedTraining = null">
+            <div class="modal-content" (click)="$event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>{{selectedTraining.technology}} Training Details</h3>
+                    <button class="close-btn" (click)="selectedTraining = null">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18" />
+                            <line x1="6" y1="6" x2="18" y2="18" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="details-grid">
+                        <div class="detail-item">
+                            <span class="label">Client:</span>
+                            <span class="value">{{getClientName(selectedTraining.clientId)}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Trainer:</span>
+                            <span class="value">{{getTrainerName(selectedTraining.trainerId)}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Status:</span>
+                            <span class="value" [ngClass]="'badge badge-' + selectedTraining.status.toLowerCase()">{{selectedTraining.status}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Progress:</span>
+                            <span class="value">{{selectedTraining.progressPercentage | number:'1.0'}}% ({{selectedTraining.completedModules}}/{{selectedTraining.totalModules}} modules)</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Start Date:</span>
+                            <span class="value">{{selectedTraining.startDate | date:'medium'}}</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="label">Estimated End:</span>
+                            <span class="value">{{selectedTraining.estimatedEndDate | date:'medium'}}</span>
+                        </div>
+                        <div *ngIf="selectedTraining.actualEndDate" class="detail-item">
+                            <span class="label">Actual End:</span>
+                            <span class="value">{{selectedTraining.actualEndDate | date:'medium'}}</span>
+                        </div>
+                    </div>
+
+                    <div class="milestones-section">
+                        <h4>All Milestones</h4>
+                        <div class="milestones-full">
+                            <div *ngFor="let milestone of selectedTraining.milestones" class="milestone-item" [class.completed]="milestone.completed">
+                                <span class="milestone-icon">
+                                    <svg *ngIf="milestone.completed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="20 6 9 17 4 12" />
+                                    </svg>
+                                    <svg *ngIf="!milestone.completed" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                    </svg>
+                                </span>
+                                <div class="milestone-content">
+                                    <h5>{{milestone.title}}</h5>
+                                    <p>{{milestone.description}}</p>
+                                    <div class="milestone-dates">
+                                        <span>Due: {{milestone.dueDate | date:'short'}}</span>
+                                        <span *ngIf="milestone.completed">Completed: {{milestone.completedAt | date:'short'}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -10,12 +10,11 @@ import { Subscription } from 'rxjs';
     template: `
         <div class="toast-container">
             <div *ngFor="let toast of toasts" 
-                 class="toast" 
+                 class="toast toast-slide-in" 
                  [class.toast-success]="toast.type === 'success'"
                  [class.toast-error]="toast.type === 'error'"
                  [class.toast-warning]="toast.type === 'warning'"
-                 [class.toast-info]="toast.type === 'info'"
-                 [@slideIn]>
+                 [class.toast-info]="toast.type === 'info'">
                 <div class="toast-icon">
                     <span *ngIf="toast.type === 'success'">✓</span>
                     <span *ngIf="toast.type === 'error'">✕</span>
@@ -47,27 +46,32 @@ import { Subscription } from 'rxjs';
             border-radius: 12px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease-out;
             min-width: 300px;
+            opacity: 0;
+        }
+
+        .toast-slide-in {
+            animation: slideIn 0.3s ease-out forwards;
         }
 
         .toast-success {
-            background: rgba(76, 175, 80, 0.9);
+            background: rgba(76, 175, 80, 0.95);
             border-left: 4px solid #4CAF50;
         }
 
         .toast-error {
-            background: rgba(244, 67, 54, 0.9);
+            background: rgba(244, 67, 54, 0.95);
             border-left: 4px solid #F44336;
         }
 
         .toast-warning {
-            background: rgba(255, 193, 7, 0.9);
+            background: rgba(255, 193, 7, 0.95);
             border-left: 4px solid #FFC107;
+            color: #333 !important;
         }
 
         .toast-info {
-            background: rgba(33, 150, 243, 0.9);
+            background: rgba(33, 150, 243, 0.95);
             border-left: 4px solid #2196F3;
         }
 
@@ -75,12 +79,24 @@ import { Subscription } from 'rxjs';
             font-size: 1.5rem;
             font-weight: bold;
             color: white;
+            flex-shrink: 0;
+        }
+
+        .toast-warning .toast-icon {
+            color: #333;
         }
 
         .toast-message {
             flex: 1;
             color: white;
             font-weight: 500;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .toast-warning .toast-message {
+            color: #333;
         }
 
         .toast-close {
@@ -97,6 +113,11 @@ import { Subscription } from 'rxjs';
             display: flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast-warning .toast-close {
+            color: #333;
         }
 
         .toast-close:hover {
@@ -136,6 +157,7 @@ export class ToastComponent implements OnInit, OnDestroy {
 
     ngOnInit(): void {
         this.subscription = this.notificationService.toast$.subscribe(toast => {
+            console.log('📢 Toast notification received:', toast);
             this.toasts.push(toast);
 
             // Auto-remove after duration
@@ -150,6 +172,7 @@ export class ToastComponent implements OnInit, OnDestroy {
     }
 
     removeToast(id: number): void {
+        console.log('🗑️ Removing toast:', id);
         this.toasts = this.toasts.filter(t => t.id !== id);
     }
 }

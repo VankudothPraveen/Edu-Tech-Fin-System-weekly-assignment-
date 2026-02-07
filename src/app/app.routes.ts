@@ -42,6 +42,10 @@ export const routes: Routes = [
             {
                 path: 'invoice-management',
                 loadComponent: () => import('./features/admin/invoice-management/invoice-management.component').then(m => m.InvoiceManagementComponent)
+            },
+            {
+                path: 'progress-tracking',
+                loadComponent: () => import('./features/admin/progress-tracking/progress-tracking.component').then(m => m.ProgressTrackingComponent)
             }
         ]
     },
